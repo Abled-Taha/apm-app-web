@@ -1,0 +1,7 @@
+{
+  "server_host":"127.0.0.1",
+  "server_port":"8000",
+  "secret_key":"django-insecure-#s7(mccb@usp4x*%dne+60q7$o61vtkivsua^a(lx9w8vk!w=w",
+  "debug":true,
+  "allowed_hosts":[]
+}
