@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from django.core.management.commands.runserver import Command as runserver
 from Config import Config as ConfigClass
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,6 +22,8 @@ global ConfigObj
 ConfigObj = ConfigClass(BASE_DIR)
 ConfigObj.readConfig()
 
+# Changing the server port
+runserver.default_port = ConfigObj.server_port
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/

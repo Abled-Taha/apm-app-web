@@ -13,4 +13,5 @@ class Config(object):
       self.server_port = self.config["server_port"]
       self.secret_key = self.config["secret_key"]
       self.debug = self.config["debug"]
+      self.client_port = self.config["client_port"]
       self.allowed_hosts = self.config["allowed_hosts"]
