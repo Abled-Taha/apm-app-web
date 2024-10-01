@@ -23,7 +23,7 @@ ConfigObj = ConfigClass(BASE_DIR)
 ConfigObj.readConfig()
 
 # Changing the server port
-runserver.default_port = ConfigObj.server_port
+runserver.default_port = ConfigObj.client_port
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/

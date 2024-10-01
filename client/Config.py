@@ -15,3 +15,4 @@ class Config(object):
       self.debug = self.config["debug"]
       self.client_port = self.config["client_port"]
       self.allowed_hosts = self.config["allowed_hosts"]
+      self.max_retries = self.config["max_retries"]
