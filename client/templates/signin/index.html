@@ -11,7 +11,8 @@
 <form action="/signin/" method="post">
   {% csrf_token %}
   {{ form }}
-  <input type="submit" value="Submit">
+  <input class="button" type="submit" value="Login">
+  <button class="button" type="button"><a href="{% url "signup" %}" class="buttonUrl"></a>Signup</button>
 </form>
 
 {% endblock body %}

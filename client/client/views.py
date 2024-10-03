@@ -8,7 +8,6 @@ from . import forms
 base_url = f"http://{ConfigObj.server_host}:{ConfigObj.server_port}"
 
 def home(request):
-  print("home")
   if request.method != "GET":
     return(JsonResponse({"errorCode":1, "errorMessage":"Method not Allowed."}))
   else:
@@ -83,3 +82,6 @@ def vault(request):
         response = redirect("signin", permanent=True)
         response.delete_cookie("sessionId")
         return response
+      
+def signup(request):
+  return HttpResponse("signup")
