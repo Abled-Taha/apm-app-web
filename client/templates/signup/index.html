@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+<title>{{title}}</title>
+<link rel="stylesheet" href="{% static "css/signup/index.css" %}">
+{% endblock head %}
+
+{% block body %}
+
+<form action="/signup/" method="post">
+  {% csrf_token %}
+  {{ form }}
+  <input class="button" type="submit" value="Signup">
+  <button class="button" type="button" id="buttonSignin">Signin</button>
+</form>
+
+<script src="{% static "js/signup/buttons.js" %}"></script>
+
+{% endblock body %}

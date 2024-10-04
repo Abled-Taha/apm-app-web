@@ -62,6 +62,10 @@ def signin(request):
         response = redirect("signin", permanent=True)
         response.set_cookie("errorMessage", dict_response["errorMessage"])
         return response
+    else:
+      response = redirect("signup", permanent=True)
+      response.set_cookie("errorMessage", "Invalid Form")
+      return response
 
   else:
     form = forms.Signin()
@@ -97,6 +101,37 @@ def vault(request):
         return response
       
 
-      
+
 def signup(request):
-  return HttpResponse("signup")
+  if request.method == "POST":
+    form = forms.Signup(request.POST)
+    if form.is_valid():
+      data = {
+        "email":form.cleaned_data["email"],
+        "username":form.cleaned_data["username"],
+        "password":form.cleaned_data["password"],
+        "rePassword":form.cleaned_data["rePassword"]
+      }
+      url = f'{base_url}/signup/'
+
+      success, dict_response = sendRequestPost(url, data)
+      if success:
+        response = redirect("signin", permanent=True)
+        response.set_cookie("errorMessage", "Account Created")
+        return response
+      elif success == None:
+        response = redirect("signup", permanent=True)
+        response.set_cookie("errorMessage", "Connection Error")
+        return response
+      else:
+        response = redirect("signup", permanent=True)
+        response.set_cookie("errorMessage", dict_response["errorMessage"])
+        return response
+    else:
+      response = redirect("signup", permanent=True)
+      response.set_cookie("errorMessage", "Invalid Form")
+      return response
+
+  else:
+    form = forms.Signup()
+    return(render(request, "signup/index.html", {'title':'APM - Signup','form':form}))
