@@ -22,8 +22,6 @@ def sendRequestPost(url, data):
         response = requests.post(url, json=data)
         if response.status_code == 200:
           dict_response = response.json()
-          print(type(dict_response))
-          print(dict_response)
           if dict_response["errorCode"] == 0:
             return True, dict_response
             
@@ -51,9 +49,14 @@ def signin(request):
         response.set_cookie("email", data["email"])
         return response
       elif success == None:
-        return JsonResponse({"errorCode":1, "errorMessage":"Connection Error"})
+        response = redirect("signin", permanent=True)
+        response.set_cookie("errorMessage", "Connection Error")
+        return response
+        # return JsonResponse({"errorCode":1, "errorMessage":"Connection Error"})
       else:
-        return redirect("signin", permanent=True)
+        response = redirect("signin", permanent=True)
+        response.set_cookie("errorMessage", dict_response["errorMessage"])
+        return response
 
   else:
     form = forms.Signin()
@@ -74,13 +77,17 @@ def vault(request):
       success, dict_response = sendRequestPost(url, data)
 
       if success:
-        print(dict_response)
         return JsonResponse(dict_response)
       elif success == None:
-        return JsonResponse({"errorCode":1, "errorMessage":"Connection Error"})
+        response = redirect("vault", permanent=True)
+        response.set_cookie("errorMessage", "Connection Error")
+        return response
+        # return JsonResponse({"errorCode":1, "errorMessage":"Connection Error"})
       else:
         response = redirect("signin", permanent=True)
+        response.set_cookie("errorMessage", dict_response["errorMessage"])
         response.delete_cookie("sessionId")
+        response.delete_cookie("email")
         return response
       
 def signup(request):
