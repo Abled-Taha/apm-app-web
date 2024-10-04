@@ -1,11 +1,13 @@
 import time
 from django.shortcuts import redirect, render
 from django.http.response import HttpResponse, JsonResponse
-import json, requests
+import requests
 from .settings import ConfigObj
 from . import forms
 
 base_url = f"http://{ConfigObj.server_host}:{ConfigObj.server_port}"
+
+
 
 def home(request):
   if request.method != "GET":
@@ -15,6 +17,8 @@ def home(request):
       return redirect("signin", permanent=True)
     else:
       return redirect("vault", permanent=True)
+
+
 
 def sendRequestPost(url, data):
       attempt_num = 0
@@ -31,6 +35,8 @@ def sendRequestPost(url, data):
           attempt_num += 1
           time.sleep(5)
       return None, {}
+
+
 
 def signin(request):
   if request.method == "POST":
@@ -52,7 +58,6 @@ def signin(request):
         response = redirect("signin", permanent=True)
         response.set_cookie("errorMessage", "Connection Error")
         return response
-        # return JsonResponse({"errorCode":1, "errorMessage":"Connection Error"})
       else:
         response = redirect("signin", permanent=True)
         response.set_cookie("errorMessage", dict_response["errorMessage"])
@@ -61,6 +66,8 @@ def signin(request):
   else:
     form = forms.Signin()
     return(render(request, "signin/index.html", {'title':'APM - Signin','form':form}))
+
+
 
 def vault(request):
   if request.method != "GET":
@@ -82,13 +89,14 @@ def vault(request):
         response = redirect("vault", permanent=True)
         response.set_cookie("errorMessage", "Connection Error")
         return response
-        # return JsonResponse({"errorCode":1, "errorMessage":"Connection Error"})
       else:
         response = redirect("signin", permanent=True)
         response.set_cookie("errorMessage", dict_response["errorMessage"])
         response.delete_cookie("sessionId")
         response.delete_cookie("email")
         return response
+      
+
       
 def signup(request):
   return HttpResponse("signup")
