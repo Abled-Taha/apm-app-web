@@ -3,6 +3,7 @@ from django import forms
 class Signin(forms.Form):
     email = forms.EmailField(label="", max_length=100, widget=forms.TextInput({"placeholder":"Email", "class":"inputField"}))
     password = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Password", "class":"inputField"}))
+    sessionName = forms.CharField(label="", max_length=100, widget=forms.TextInput({"placeholder":"Device Name (Optional)", "class":"inputField"}), required=False)
 
 class Signup(forms.Form):
     email = forms.EmailField(label="", max_length=100, widget=forms.TextInput({"placeholder":"Email", "class":"inputField"}))

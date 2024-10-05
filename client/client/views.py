@@ -42,17 +42,22 @@ def signin(request):
   if request.method == "POST":
     form = forms.Signin(request.POST)
     if form.is_valid():
+      try:
+        sessionName = form.cleaned_data["sessionName"]
+      except:
+        sessionName = ""
       data = {
         "email":form.cleaned_data["email"],
-        "password":form.cleaned_data["password"]
+        "password":form.cleaned_data["password"],
+        "sessionName":sessionName
       }
       url = f'{base_url}/signin/'
 
       success, dict_response = sendRequestPost(url, data)
       if success:
         response = redirect("home", permanent=True)
-        response.set_cookie("sessionId", dict_response["sessionId"])
-        response.set_cookie("email", data["email"])
+        response.set_cookie("sessionId", dict_response["sessionId"], max_age=60*60*24*365)
+        response.set_cookie("email", data["email"], max_age=60*60*24*365)
         return response
       elif success == None:
         response = redirect("signin", permanent=True)
@@ -63,7 +68,7 @@ def signin(request):
         response.set_cookie("errorMessage", dict_response["errorMessage"])
         return response
     else:
-      response = redirect("signup", permanent=True)
+      response = redirect("signin", permanent=True)
       response.set_cookie("errorMessage", "Invalid Form")
       return response
 
