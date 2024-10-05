@@ -130,7 +130,7 @@ def vault(request):
       success, dict_response = sendRequestPost(url, data)
 
       if success:
-        return JsonResponse(dict_response)
+        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"]})
       elif success == None:
         response = redirect("vault", permanent=True)
         response.set_cookie("errorMessage", "Connection Error")

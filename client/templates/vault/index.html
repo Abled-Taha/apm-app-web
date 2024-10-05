@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+<title>{{title}}</title>
+<link rel="stylesheet" href="{% static "css/vault/index.css" %}">
+{% endblock head %}
+
+{% block body %}
+
+<ol>
+  {% for entry in passwords %}
+  <li>
+    {% for key, value in entry.items %}
+      <p>
+        {{ key }} : {{ value }}
+      </p>
+    {% endfor %}
+  </li>
+  {% endfor %}
+</ol>
+
+<button class="button" type="button" id="buttonLogout">Logout</button>
+<script src="{% static "js/vault/buttons.js" %}"></script>
+
+{% endblock body %}
