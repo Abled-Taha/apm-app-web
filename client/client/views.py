@@ -25,16 +25,14 @@ def sendRequestPost(url, data):
       while attempt_num < ConfigObj.max_retries:
         try:
           response = requests.post(url, json=data)
-        except:
-          pass
-        if response.status_code == 200:
           dict_response = response.json()
+
           if dict_response["errorCode"] == 0:
             return True, dict_response
-            
+          
           else:
             return False, dict_response
-        else:
+        except:
           attempt_num += 1
           time.sleep(2)
       return None, {}
