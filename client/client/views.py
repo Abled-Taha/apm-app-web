@@ -157,7 +157,7 @@ def logout(request):
     success, dict_response = sendRequestPost(url, data)
 
     if success:
-      response = redirect("signin", permanent=True)
+      response = redirect("signin", permanent=False)
       response.delete_cookie("email")
       response.delete_cookie("sessionId")
       return response
