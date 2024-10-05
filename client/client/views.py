@@ -78,35 +78,6 @@ def signin(request):
 
 
 
-def vault(request):
-  if request.method != "GET":
-    return(JsonResponse({"errorCode":1, "errorMessage":"Method not Allowed."}))
-  else:
-    if request.COOKIES.get("sessionId") == None:
-      return redirect("signin")
-    else:
-      url = f'{base_url}/vault-get/'
-      data = {
-        "email":request.COOKIES.get("email"),
-        "sessionId":request.COOKIES.get("sessionId")
-      }
-      success, dict_response = sendRequestPost(url, data)
-
-      if success:
-        return JsonResponse(dict_response)
-      elif success == None:
-        response = redirect("vault", permanent=True)
-        response.set_cookie("errorMessage", "Connection Error")
-        return response
-      else:
-        response = redirect("signin", permanent=True)
-        response.set_cookie("errorMessage", dict_response["errorMessage"])
-        response.delete_cookie("sessionId")
-        response.delete_cookie("email")
-        return response
-      
-
-
 def signup(request):
   if request.method == "POST":
     form = forms.Signup(request.POST)
@@ -140,3 +111,62 @@ def signup(request):
   else:
     form = forms.Signup()
     return(render(request, "signup/index.html", {'title':'APM - Signup','form':form}))
+
+
+
+def vault(request):
+  if request.method != "GET":
+    return(JsonResponse({"errorCode":1, "errorMessage":"Method not Allowed."}))
+  else:
+    if request.COOKIES.get("sessionId") == None:
+      return redirect("signin")
+    else:
+      url = f'{base_url}/vault-get/'
+      data = {
+        "email":request.COOKIES.get("email"),
+        "sessionId":request.COOKIES.get("sessionId")
+      }
+      success, dict_response = sendRequestPost(url, data)
+
+      if success:
+        return JsonResponse(dict_response)
+      elif success == None:
+        response = redirect("vault", permanent=True)
+        response.set_cookie("errorMessage", "Connection Error")
+        return response
+      else:
+        response = redirect("signin", permanent=True)
+        response.set_cookie("errorMessage", dict_response["errorMessage"])
+        response.delete_cookie("sessionId")
+        response.delete_cookie("email")
+        return response
+      
+
+
+def logout(request):
+  if request.method != "GET":
+    return(JsonResponse({"errorCode":1, "errorMessage":"Method not Allowed."}))
+  else:
+    url = f'{base_url}/session-delete/'
+    data = {
+      "email":request.COOKIES.get("email"),
+      "sessionId":request.COOKIES.get("sessionId"),
+      "sessionIdW":request.COOKIES.get("sessionId")
+    }
+    success, dict_response = sendRequestPost(url, data)
+
+    if success:
+      response = redirect("signin", permanent=True)
+      response.delete_cookie("email")
+      response.delete_cookie("sessionId")
+      return response
+    elif success == None:
+      response = redirect("vault", permanent=True)
+      response.set_cookie("errorMessage", "Connection Error")
+      return response
+    else:
+      response = redirect("signin", permanent=True)
+      response.set_cookie("errorMessage", dict_response["errorMessage"])
+      response.delete_cookie("sessionId")
+      response.delete_cookie("email")
+      return response
