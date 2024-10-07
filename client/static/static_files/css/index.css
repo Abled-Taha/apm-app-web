@@ -1,11 +1,12 @@
 * {
   margin: 0;
   padding: 0;
-  color: white;
+  box-sizing: border-box;
 }
 
 body {
-  background-color: rgb(54, 69, 73);
+  font-family: 'Roboto', sans-serif;
+  /* background-color: rgb(54, 69, 73); */
 }
 
 .section-main {
