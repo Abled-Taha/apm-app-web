@@ -35,10 +35,21 @@ function closePopupDelete() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
+function openPopupAdd() {
+  document.getElementById("popup-add").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupAdd() {
+  document.getElementById("popup-add").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
 function handleKeyDown(event) {
   if (event.key === "Escape") {
     closePopup();
     closePopupDelete();
+    closePopupAdd();
   }
 }
 
@@ -56,4 +67,19 @@ function filterVault() {
           item.style.display = 'none';
       }
   });
+}
+
+function togglePasswordVisibility() {
+  const passwordField = document.getElementById("id_password");
+  const toggleIconPassword = document.getElementById("togglePassword");
+
+  if (passwordField.type === "password") {
+      passwordField.type = "text";
+      toggleIconPassword.classList.remove("fa-eye");
+      toggleIconPassword.classList.add("fa-eye-slash");
+  } else {
+      passwordField.type = "password";
+      toggleIconPassword.classList.remove("fa-eye-slash");
+      toggleIconPassword.classList.add("fa-eye");
+  }
 }

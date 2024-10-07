@@ -133,7 +133,7 @@ def vault(request):
       success, dict_response = sendRequestPost(url, data)
 
       if success:
-        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete()})
+        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew()})
       elif success == None:
         response = redirect("vault", permanent=True)
         messages.error(request, "Connection Error")
