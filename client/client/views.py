@@ -1,3 +1,4 @@
+import json
 import time
 from django.shortcuts import redirect, render
 from django.contrib import messages
@@ -185,6 +186,33 @@ def vaultNew(request):
   else:
     form = forms.VaultNew()
     return(render(request, "vault/vaultNew.html", {'title':'APM - New','form':form}))
+  
+
+
+def vaultDelete(request):
+  if request.method == "POST":
+    print(request.body)
+    data = json.loads(request.body)
+    data["email"] = request.COOKIES.get("email")
+    data["sessionId"] = request.COOKIES.get("sessionId")
+
+    url = f'{base_url}/vault-delete/'
+
+    success, dict_response = sendRequestPost(url, data)
+    if success:
+      response = redirect("vault")
+      return response
+    elif success == None:
+      response = redirect("vault", permanent=True)
+      messages.error(request, "Connection Error")
+      return response
+    else:
+      response = redirect("vault", permanent=True)
+      messages.error(request, dict_response["errorMessage"])
+      return response
+  
+  else:
+    return HttpResponse("Method not allowed")
 
 
 

@@ -25,5 +25,6 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("vault/", views.vault, name="vault"),
     path("vault-new/", views.vaultNew, name="vaultNew"),
+    path("vault-delete/", views.vaultDelete, name="vaultDelete"),
     path("logout/", views.logout, name="logout"),
 ]

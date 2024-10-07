@@ -42,7 +42,7 @@
             </div>
             <div class="item-actions">
                 <i class="fas fa-copy" onclick="event.stopPropagation(); copyPassword('{{entry.password}}')"></i>
-                {% comment %} <i class="fas fa-trash" onclick="event.stopPropagation(); deletePassword()"></i> {% endcomment %}
+                <i class="fas fa-trash" onclick="event.stopPropagation(); deletePassword({{entry.id}})"></i>
             </div>
         </div>
       {% endfor %}

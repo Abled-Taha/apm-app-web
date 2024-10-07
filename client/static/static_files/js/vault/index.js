@@ -24,8 +24,19 @@ navigator.clipboard.writeText(password).then(function() {
 });
 }
 
-function deletePassword() {
-  alert("Password deleted!");
+function deletePassword(id) {
+  fetch("/vault-delete/", {
+    method: "POST",
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify({
+      'id': id
+    }),
+    credentials: "same-origin"
+  });
+  location.reload();
 }
 
 function handleKeyDown(event) {
@@ -48,4 +59,13 @@ function filterVault() {
           item.style.display = 'none';
       }
   });
+}
+
+function getCookie(name) {
+  let cookie = {};
+  document.cookie.split(';').forEach(function(el) {
+    let split = el.split('=');
+    cookie[split[0].trim()] = split.slice(1).join("=");
+  })
+  return cookie[name];
 }
