@@ -7,7 +7,7 @@ function openPopup(website, username, password, url, id) {
   document.getElementById("popup-button").onclick = function() {
     copyPassword(password)
   }
-  document.getElementById("popup").style.display = "block";
+  document.getElementById("popup").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
 }
 
@@ -32,4 +32,20 @@ function handleKeyDown(event) {
   if (event.key === "Escape") {
     closePopup();
   }
+}
+
+function filterVault() {
+  const searchValue = document.getElementById('search').value.toLowerCase();
+  const vaultItems = document.querySelectorAll('.vault-item');
+
+  vaultItems.forEach(item => {
+      const itemName = item.querySelector('h3').textContent.toLowerCase();
+      const itemUsername = item.querySelector('p').textContent.toLowerCase();
+      
+      if (itemName.includes(searchValue) || itemUsername.includes(searchValue)) {
+          item.style.display = ''; // Show
+      } else {
+          item.style.display = 'none'; // Hide
+      }
+  });
 }
