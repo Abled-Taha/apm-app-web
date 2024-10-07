@@ -22,6 +22,7 @@
         <h2>Create an Account</h2>
         <p>Join <a href="https://github.com/Abled-Taha/apm-app-web">APM</a> by creating a new account</p>
         <form action="/signup/" method="POST">
+          {% csrf_token %}
             <div class="input-group">
                 <label for="fullname">Username</label>
                 {{form.username}}
