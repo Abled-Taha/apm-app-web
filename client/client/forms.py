@@ -16,3 +16,6 @@ class VaultNew(forms.Form):
     username = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the username"}))
     password = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Create a password"}))
     url = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the url"}), required=False)
+
+class VaultDelete(forms.Form):
+    id = forms.IntegerField(label="", widget=forms.NumberInput({"placeholder":"Enter the ID"}))

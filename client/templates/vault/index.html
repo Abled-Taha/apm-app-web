@@ -42,7 +42,7 @@
             </div>
             <div class="item-actions">
                 <i class="fas fa-copy" onclick="event.stopPropagation(); copyPassword('{{entry.password}}')"></i>
-                <i class="fas fa-trash" onclick="event.stopPropagation(); deletePassword({{entry.id}})"></i>
+                <i class="fas fa-trash" onclick="event.stopPropagation(); openPopupDelete('{{entry.id}}')"></i>
             </div>
         </div>
       {% endfor %}
@@ -50,6 +50,7 @@
   </div>
 
 {% include "vault/popupModal.html" %}
+{% include "vault/popupModalDelete.html" %}
 
 </section>
 

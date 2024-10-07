@@ -1,0 +1,12 @@
+<div id="popup-delete" class="modal">
+  <div class="modal-content">
+      <span class="close" id="popup-delete-close" onclick="closePopupDelete()">&times;</span>
+      <h3>Delete?</h3>
+      <form action="/vault-delete/" method="post">
+        {% csrf_token %}
+        {{formVaultDelete.id}}
+        <br>
+        <input type="submit" value="Delete">
+      </form>
+  </div>
+</div>

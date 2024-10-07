@@ -7,12 +7,12 @@ function openPopup(website, username, password, url, id) {
   document.getElementById("popup-button").onclick = function() {
     copyPassword(password)
   }
-  document.getElementById("popup").style.display = "flex";
+  document.getElementById("popup-details").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
 }
 
 function closePopup() {
-  document.getElementById("popup").style.display = "none";
+  document.getElementById("popup-details").style.display = "none";
   document.removeEventListener('keydown', handleKeyDown);
 }
 
@@ -24,24 +24,21 @@ navigator.clipboard.writeText(password).then(function() {
 });
 }
 
-function deletePassword(id) {
-  fetch("/vault-delete/", {
-    method: "POST",
-    headers: {
-      'X-CSRFToken': getCookie('csrftoken'),
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify({
-      'id': id
-    }),
-    credentials: "same-origin"
-  });
-  location.reload();
+function openPopupDelete(id) {
+  document.getElementById("id_id").setAttribute('value', id)
+  document.getElementById("popup-delete").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupDelete() {
+  document.getElementById("popup-delete").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
 }
 
 function handleKeyDown(event) {
   if (event.key === "Escape") {
     closePopup();
+    closePopupDelete();
   }
 }
 
@@ -59,13 +56,4 @@ function filterVault() {
           item.style.display = 'none';
       }
   });
-}
-
-function getCookie(name) {
-  let cookie = {};
-  document.cookie.split(';').forEach(function(el) {
-    let split = el.split('=');
-    cookie[split[0].trim()] = split.slice(1).join("=");
-  })
-  return cookie[name];
 }

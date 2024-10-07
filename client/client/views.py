@@ -133,7 +133,7 @@ def vault(request):
       success, dict_response = sendRequestPost(url, data)
 
       if success:
-        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"]})
+        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete()})
       elif success == None:
         response = redirect("vault", permanent=True)
         messages.error(request, "Connection Error")
@@ -191,26 +191,32 @@ def vaultNew(request):
 
 def vaultDelete(request):
   if request.method == "POST":
-    print(request.body)
-    data = json.loads(request.body)
-    data["email"] = request.COOKIES.get("email")
-    data["sessionId"] = request.COOKIES.get("sessionId")
+    form = forms.VaultDelete(request.POST)
+    if form.is_valid():
+      data = {
+        "id" : form.cleaned_data["id"],
+        "email" : request.COOKIES.get("email"),
+        "sessionId" : request.COOKIES.get("sessionId")
+      }
 
-    url = f'{base_url}/vault-delete/'
+      url = f'{base_url}/vault-delete/'
 
-    success, dict_response = sendRequestPost(url, data)
-    if success:
-      response = redirect("vault")
-      return response
-    elif success == None:
-      response = redirect("vault", permanent=True)
-      messages.error(request, "Connection Error")
-      return response
+      success, dict_response = sendRequestPost(url, data)
+      if success:
+        response = redirect("vault")
+        return response
+      elif success == None:
+        response = redirect("vault", permanent=True)
+        messages.error(request, "Connection Error")
+        return response
+      else:
+        response = redirect("vault", permanent=True)
+        messages.error(request, dict_response["errorMessage"])
+        return response
     else:
       response = redirect("vault", permanent=True)
-      messages.error(request, dict_response["errorMessage"])
+      messages.error(request, "Invalid Form")
       return response
-  
   else:
     return HttpResponse("Method not allowed")
 
