@@ -146,6 +146,48 @@ def vault(request):
       
 
 
+def vaultNew(request):
+  if request.method == "POST":
+    form = forms.VaultNew(request.POST)
+    if form.is_valid():
+      try:
+        url = form.cleaned_data["url"]
+      except:
+        url = ""
+      data = {
+        "email":request.COOKIES.get("email"),
+        "sessionId":request.COOKIES.get("sessionId"),
+        "name":form.cleaned_data["name"],
+        "username":form.cleaned_data["username"],
+        "password":form.cleaned_data["password"],
+        "url":url
+      }
+      url = f'{base_url}/vault-new/'
+
+      success, dict_response = sendRequestPost(url, data)
+      if success:
+        response = redirect("vault", permanent=True)
+        messages.success(request, "Password Added")
+        return response
+      elif success == None:
+        response = redirect("vault", permanent=True)
+        messages.error(request, "Connection Error")
+        return response
+      else:
+        response = redirect("vault", permanent=True)
+        messages.error(request, dict_response["errorMessage"])
+        return response
+    else:
+      response = redirect("vault", permanent=True)
+      messages.error(request, "Invalid Form")
+      return response
+
+  else:
+    form = forms.VaultNew()
+    return(render(request, "vault/vaultNew.html", {'title':'APM - New','form':form}))
+
+
+
 def logout(request):
   if request.method != "GET":
     return(JsonResponse({"errorCode":1, "errorMessage":"Method not Allowed."}))

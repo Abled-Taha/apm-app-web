@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+<title>{{title}}</title>
+<link rel="stylesheet" href="{% static "css/vault/vaultNew.css" %}">
+<script src="{% static "js/vault/vaultNew.js" %}"></script>
+{% endblock head %}
+
+{% block body %}
+
+<section class="section section-vault-add">
+  <div class="container">
+    <div class="add-box">
+        <h2>Create a Password</h2>
+        <form action="/vault-new/" method="POST">
+          {% csrf_token %}
+            <div class="input-group">
+                <label for="fullname">Name</label>
+                {{form.name}}
+            </div>
+            <div class="input-group">
+                <label for="email">Username</label>
+                {{form.username}}
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                  {{form.password}}
+                  <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                </div>
+            </div>
+            <div class="input-group">
+              <label for="url">URL</label>
+              {{form.url}}
+            </div>
+            <button type="submit">Add</button>
+        </form>
+    </div>
+</div>
+</section>
+
+{% endblock body %}

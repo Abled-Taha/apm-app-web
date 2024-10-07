@@ -10,3 +10,9 @@ class Signup(forms.Form):
     username = forms.CharField(label="", max_length=100, widget=forms.TextInput({"placeholder":"Enter your username"}))
     password = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Create a password"}))
     rePassword = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Confirm your password"}))
+
+class VaultNew(forms.Form):
+    name = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the name"}))
+    username = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the username"}))
+    password = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Create a password"}))
+    url = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the url"}), required=False)
