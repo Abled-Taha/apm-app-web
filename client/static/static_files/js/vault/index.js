@@ -43,9 +43,9 @@ function filterVault() {
       const itemUsername = item.querySelector('p').textContent.toLowerCase();
       
       if (itemName.includes(searchValue) || itemUsername.includes(searchValue)) {
-          item.style.display = ''; // Show
+          item.style.display = '';
       } else {
-          item.style.display = 'none'; // Hide
+          item.style.display = 'none';
       }
   });
 }
