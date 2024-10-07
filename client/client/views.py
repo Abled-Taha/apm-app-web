@@ -1,5 +1,6 @@
 import time
 from django.shortcuts import redirect, render
+from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
 import requests
 from .settings import ConfigObj
@@ -62,15 +63,16 @@ def signin(request):
         return response
       elif success == None:
         response = redirect("signin", permanent=True)
-        response.set_cookie("errorMessage", "Connection Error")
+        messages.error(request, "Connection Error")
         return response
       else:
         response = redirect("signin", permanent=True)
-        response.set_cookie("errorMessage", dict_response["errorMessage"])
+        messages.error(request, dict_response["errorMessage"])
+        # response.set_cookie("errorMessage", dict_response["errorMessage"])
         return response
     else:
       response = redirect("signin", permanent=True)
-      response.set_cookie("errorMessage", "Invalid Form")
+      messages.error(request, "Invalid Form")
       return response
 
   else:
@@ -94,19 +96,19 @@ def signup(request):
       success, dict_response = sendRequestPost(url, data)
       if success:
         response = redirect("signin", permanent=True)
-        response.set_cookie("errorMessage", "Account Created")
+        messages.success(request, "Account Created")
         return response
       elif success == None:
         response = redirect("signup", permanent=True)
-        response.set_cookie("errorMessage", "Connection Error")
+        messages.error(request, "Connection Error")
         return response
       else:
         response = redirect("signup", permanent=True)
-        response.set_cookie("errorMessage", dict_response["errorMessage"])
+        messages.error(request, dict_response["errorMessage"])
         return response
     else:
       response = redirect("signup", permanent=True)
-      response.set_cookie("errorMessage", "Invalid Form")
+      messages.error(request, "Invalid Form")
       return response
 
   else:
@@ -133,11 +135,11 @@ def vault(request):
         return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"]})
       elif success == None:
         response = redirect("vault", permanent=True)
-        response.set_cookie("errorMessage", "Connection Error")
+        messages.error(request, "Connection Error")
         return response
       else:
         response = redirect("signin", permanent=True)
-        response.set_cookie("errorMessage", dict_response["errorMessage"])
+        messages.error(request, dict_response["errorMessage"])
         response.delete_cookie("sessionId")
         response.delete_cookie("email")
         return response
