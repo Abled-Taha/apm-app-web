@@ -4,23 +4,53 @@
 {% block head %}
 <title>{{title}}</title>
 <link rel="stylesheet" href="{% static "css/vault/index.css" %}">
+<script src="{% static "js/vault/buttons.js" %}"></script>
 {% endblock head %}
 
 {% block body %}
 
-<ol>
-  {% for entry in passwords %}
-  <li>
-    {% for key, value in entry.items %}
-      <p>
-        {{ key }} : {{ value }}
-      </p>
-    {% endfor %}
-  </li>
-  {% endfor %}
-</ol>
+<section class="section section-vault">
+  <header>
+    <nav class="navbar">
+        <h1>APM Vault</h1>
+        <ul class="nav-links">
+            <li><a href="">Add New</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+  </header>
 
-<button class="button" type="button" id="buttonLogout">Logout</button>
-<script src="{% static "js/vault/buttons.js" %}"></script>
+  <div class="container vault-container">
+    <div class="search-bar">
+        <input type="text" id="search" placeholder="Search saved passwords..." />
+        <i class="fas fa-search"></i>
+    </div>
+
+    <div class="vault-list">
+      {% for entry in passwords %}
+        <div class="vault-item" onclick="openPopup('{{entry.name}}', '{{entry.username}}', '{{entry.password}}', '{{entry.url}}', '{{entry.id}}')">
+            <div class="item-details">
+              {% for key, value in entry.items %}
+                {% if key == "name" %}
+                <h3>{{ value }}</h3>
+                {% elif key == "username" %}
+                <p>{{ value }}</p>
+                {% elif key == "url" %}
+                <p>{{ value }}</p>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="item-actions">
+                <i class="fas fa-copy" onclick="event.stopPropagation(); copyPassword('{{entry.password}}')"></i>
+                {% comment %} <i class="fas fa-trash" onclick="event.stopPropagation(); deletePassword()"></i> {% endcomment %}
+            </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{% include "vault/popupModal.html" %}
+
+</section>
 
 {% endblock body %}
