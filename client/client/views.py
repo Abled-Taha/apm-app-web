@@ -77,8 +77,11 @@ def signin(request):
       return response
 
   else:
-    form = forms.Signin()
-    return(render(request, "signin/index.html", {'title':'APM - Signin','form':form}))
+    if request.COOKIES.get("sessionId") != None:
+      return(redirect("vault", permanent=True))
+    else:
+      form = forms.Signin()
+      return(render(request, "signin/index.html", {'title':'APM - Signin','form':form}))
 
 
 
@@ -113,8 +116,11 @@ def signup(request):
       return response
 
   else:
-    form = forms.Signup()
-    return(render(request, "signup/index.html", {'title':'APM - Signup','form':form}))
+    if request.COOKIES.get("sessionId") != None:
+      return(redirect("vault", permanent=True))
+    else:
+      form = forms.Signup()
+      return(render(request, "signup/index.html", {'title':'APM - Signup','form':form}))
 
 
 
