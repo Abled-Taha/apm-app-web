@@ -147,6 +147,7 @@ def vault(request):
         response.delete_cookie("sessionId")
         response.delete_cookie("email")
         response.delete_cookie("password")
+        response.delete_cookie("salt")
         return response
       
 
@@ -254,4 +255,5 @@ def logout(request):
       response.set_cookie("errorMessage", dict_response["errorMessage"])
       response.delete_cookie("sessionId")
       response.delete_cookie("email")
+      response.delete_cookie("salt")
       return response
