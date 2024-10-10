@@ -1,11 +1,9 @@
-import json
-import time
+import json, time, requests
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
-import requests
 from .settings import ConfigObj
-from . import forms
+from . import forms, encryptor
 
 base_url = f"http://{ConfigObj.server_host}:{ConfigObj.server_port}"
 
@@ -61,6 +59,8 @@ def signin(request):
         response = redirect("home", permanent=True)
         response.set_cookie("sessionId", dict_response["sessionId"], max_age=60*60*24*365)
         response.set_cookie("email", data["email"], max_age=60*60*24*365)
+        response.set_cookie("password", data["password"], max_age=60*60*24*365)
+        response.set_cookie("salt", dict_response["salt"], max_age=60*60*24*365)
         return response
       elif success == None:
         response = redirect("signin", permanent=True)
@@ -133,6 +133,9 @@ def vault(request):
       success, dict_response = sendRequestPost(url, data)
 
       if success:
+        for value in dict_response["passwords"]:
+          passwordDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["password"])
+          value["password"] = passwordDecrypt
         return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew()})
       elif success == None:
         response = redirect("vault", permanent=True)
@@ -143,6 +146,7 @@ def vault(request):
         messages.error(request, dict_response["errorMessage"])
         response.delete_cookie("sessionId")
         response.delete_cookie("email")
+        response.delete_cookie("password")
         return response
       
 
@@ -155,12 +159,13 @@ def vaultNew(request):
         url = form.cleaned_data["url"]
       except:
         url = ""
+      passwordEncrypt = encryptor.encrypt(request.COOKIES.get("salt"), form.cleaned_data["password"], request.COOKIES.get("password"))
       data = {
         "email":request.COOKIES.get("email"),
         "sessionId":request.COOKIES.get("sessionId"),
         "name":form.cleaned_data["name"],
         "username":form.cleaned_data["username"],
-        "password":form.cleaned_data["password"],
+        "password":passwordEncrypt,
         "url":url
       }
       url = f'{base_url}/vault-new/'
@@ -238,6 +243,7 @@ def logout(request):
       response = redirect("signin", permanent=False)
       response.delete_cookie("email")
       response.delete_cookie("sessionId")
+      response.delete_cookie("password")
       return response
     elif success == None:
       response = redirect("vault", permanent=True)
