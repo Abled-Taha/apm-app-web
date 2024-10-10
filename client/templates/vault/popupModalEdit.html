@@ -1,0 +1,39 @@
+<div id="popup-edit" class="modal">
+  <div class="modal-content">
+    <span class="close" id="popup-edit-close" onclick="closePopupEdit()">&times;</span>
+    <div class="edit-body">
+      <div class="edit-container">
+        <div class="edit-box">
+          <h2>Edit the Password</h2>
+          <form action="/vault-edit/" method="POST">
+            {% csrf_token %}
+              <div class="input-group">
+                  <label for="fullname" id="popup-edit-name">Name</label>
+                  {{formVaultEdit.newName}}
+              </div>
+              <div class="input-group">
+                  <label for="email" id="popup-edit-username">Username</label>
+                  {{formVaultEdit.newUsername}}
+              </div>
+              <div class="input-group">
+                  <label for="password" id="popup-edit-password">Password</label>
+                  <div class="password-wrapper">
+                    {{formVaultEdit.newPassword}}
+                    <i class="fas fa-eye" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                  </div>
+              </div>
+              <div class="input-group">
+                <label for="url" id="popup-edit-url">URL</label>
+                {{formVaultEdit.newUrl}}
+              </div>
+              <div class="input-group">
+                <label for="id" id="popup-edit-id-label">id</label>
+                {{formVaultEdit.id}}
+              </div>
+              <button type="submit">Save</button>
+          </form>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>

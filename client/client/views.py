@@ -136,7 +136,7 @@ def vault(request):
         for value in dict_response["passwords"]:
           passwordDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["password"])
           value["password"] = passwordDecrypt
-        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew()})
+        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit()})
       elif success == None:
         response = redirect("vault", permanent=True)
         messages.error(request, "Connection Error")
@@ -190,9 +190,55 @@ def vaultNew(request):
       return response
 
   else:
-    form = forms.VaultNew()
-    return(render(request, "vault/vaultNew.html", {'title':'APM - New','form':form}))
-  
+    # form = forms.VaultNew()
+    # return(render(request, "vault/vaultNew.html", {'title':'APM - New','form':form}))
+    return HttpResponse("method not allowed")
+
+
+
+def vaultEdit(request):
+  if request.method == "POST":
+    form = forms.VaultEdit(request.POST)
+    if form.is_valid():
+      try:
+        newUrl = form.cleaned_data["newUrl"]
+      except:
+        newUrl = ""
+      passwordEncrypt = encryptor.encrypt(request.COOKIES.get("salt"), form.cleaned_data["newPassword"], request.COOKIES.get("password"))
+      data = {
+        "email":request.COOKIES.get("email"),
+        "sessionId":request.COOKIES.get("sessionId"),
+        "newName":form.cleaned_data["newName"],
+        "newUsername":form.cleaned_data["newUsername"],
+        "newPassword":passwordEncrypt,
+        "newUrl":newUrl,
+        "id":form.cleaned_data["id"]
+      }
+      url = f'{base_url}/vault-edit/'
+
+      success, dict_response = sendRequestPost(url, data)
+      if success:
+        response = redirect("vault", permanent=True)
+        messages.success(request, "Password Saved")
+        return response
+      elif success == None:
+        response = redirect("vault", permanent=True)
+        messages.error(request, "Connection Error")
+        return response
+      else:
+        response = redirect("vault", permanent=True)
+        messages.error(request, dict_response["errorMessage"])
+        return response
+    else:
+      response = redirect("vault", permanent=True)
+      messages.error(request, "Invalid Form")
+      return response
+
+  else:
+    # form = forms.VaultNew()
+    # return(render(request, "vault/vaultNew.html", {'title':'APM - New','form':form}))
+    return HttpResponse("method not allowed")
+
 
 
 def vaultDelete(request):

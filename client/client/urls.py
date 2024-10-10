@@ -26,5 +26,6 @@ urlpatterns = [
     path("vault/", views.vault, name="vault"),
     path("vault-new/", views.vaultNew, name="vaultNew"),
     path("vault-delete/", views.vaultDelete, name="vaultDelete"),
+    path("vault-edit/", views.vaultEdit, name="vaultEdit"),
     path("logout/", views.logout, name="logout"),
 ]

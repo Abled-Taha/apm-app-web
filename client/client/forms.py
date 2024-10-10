@@ -19,3 +19,10 @@ class VaultNew(forms.Form):
 
 class VaultDelete(forms.Form):
     id = forms.IntegerField(label="", widget=forms.NumberInput({"placeholder":"Enter the ID"}))
+
+class VaultEdit(forms.Form):
+    id = forms.IntegerField(label="", widget=forms.NumberInput({"placeholder":"Enter the ID", "id":"id_popup-edit-id"}))
+    newName = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the name"}))
+    newUsername = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the username"}))
+    newPassword = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Create a password"}))
+    newUrl = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the url"}), required=False)
