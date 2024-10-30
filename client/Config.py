@@ -1,4 +1,5 @@
-import json
+import os
+from dotenv import load_dotenv
 
 class Config(object):
   def __init__(self, BASE_DIR):
@@ -6,14 +7,20 @@ class Config(object):
   
   # Loading Config File
   def readConfig(self):
-    with open(f'{self.BASE_DIR}/../config.json', 'r') as f:
-      self.config = json.load(f)
+    try:
+      load_dotenv(f'{self.BASE_DIR}/../.env')
+    except:
+      pass
       
-      self.server_host = self.config["server_host"]
-      self.server_port = self.config["server_port"]
-      self.secret_key = self.config["secret_key"]
-      self.debug = self.config["debug"]
-      self.client_host = self.config["client_host"]
-      self.client_port = self.config["client_port"]
-      self.allowed_hosts = self.config["allowed_hosts"]
-      self.max_retries = self.config["max_retries"]
+    self.debug = os.getenv("debug")
+    if self.debug == "True":
+      self.debug = True
+    else:
+      self.debug = False
+    self.secret_key = os.getenv("secret_key")
+    self.server_host = os.getenv("server_host")
+    self.server_port = os.getenv("server_port")
+    self.client_host = os.getenv("client_host")
+    self.client_port = os.getenv("client_port")
+    self.allowed_hosts = os.getenv("allowed_hosts").split(",")
+    self.max_retries = os.getenv("max_retries")
