@@ -15,7 +15,13 @@
         <h1>APM Vault</h1>
         <ul class="nav-links">
             <li><a onclick=openPopupAdd() href="javascript:;">Add New</a></li>
-            <li><a href="/logout">Logout</a></li>
+            <li>
+              <button class="setting-btn" onclick=openPopupSettings()>
+                <span class="bar bar1"></span>
+                <span class="bar bar2"></span>
+                <span class="bar bar1"></span>
+              </button>
+            </li>
         </ul>
     </nav>
   </header>
@@ -53,6 +59,7 @@
 {% include "vault/popupModalDelete.html" %}
 {% include "vault/popupModalNew.html" %}
 {% include "vault/popupModalEdit.html" %}
+{% include "vault/popupModalSettings.html" %}
 
 </section>
 

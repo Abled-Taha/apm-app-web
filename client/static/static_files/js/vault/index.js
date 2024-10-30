@@ -48,6 +48,16 @@ function closePopupAdd() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
+function openPopupSettings() {
+  document.getElementById("popup-settings").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupSettings() {
+  document.getElementById("popup-settings").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
 function openPopupEdit(id, name, username, password, url) {
   document.getElementById("id_newName").value = name;
   document.getElementById("id_newUsername").value = username;
@@ -69,6 +79,7 @@ function handleKeyDown(event) {
     closePopupDelete();
     closePopupAdd();
     closePopupEdit();
+    closePopupSettings();
   }
 }
 
@@ -109,4 +120,10 @@ function togglePasswordVisibility() {
 function editPassword(id, name, username, password, url) {
   closePopup()
   openPopupEdit(id, name, username, password, url)
+}
+
+function simulateAnchorClick(href) {
+  const a = document.createElement('a');
+  a.href = href;
+  a.click();
 }
