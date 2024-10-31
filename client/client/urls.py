@@ -9,5 +9,6 @@ urlpatterns = [
     path("vault-new/", views.vaultNew, name="vaultNew"),
     path("vault-delete/", views.vaultDelete, name="vaultDelete"),
     path("vault-edit/", views.vaultEdit, name="vaultEdit"),
+    path("session-edit/", views.sessionEdit, name="sessionEdit"),
     path("logout/", views.logout, name="logout"),
 ]

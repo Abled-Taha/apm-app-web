@@ -1,0 +1,20 @@
+<div id="popup-session" class="modal">
+  <div class="modal-content">
+    <span class="close" id="popup-sessions-close" onclick="closePopupSession()"
+      >&times;</span
+    >
+    <h2>Edit the Session Name</h2>
+    <form action="/session-edit/" method="POST">
+      {% csrf_token %}
+      <div class="input-group">
+        <label for="newName" id="popup-session-name">Name</label>
+        {{formSessionEdit.newSessionName}}
+      </div>
+      <div class="input-group">
+        <label for="sessionIdW" id="popup-session-id">Id</label>
+        {{formSessionEdit.sessionIdW}}
+      </div>
+      <button type="submit">Save</button>
+    </form>
+  </div>
+</div>

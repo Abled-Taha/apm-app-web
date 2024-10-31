@@ -142,7 +142,13 @@ def vault(request):
         for value in dict_response["passwords"]:
           passwordDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["password"])
           value["password"] = passwordDecrypt
-        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit()})
+        url = f'{base_url}/session-get/'
+        success, dict_response1 = sendRequestPost(url, data)
+        if success:
+          sessions = dict_response1["sessionIds"]
+        else:
+          sessions = []
+        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'sessions':sessions})
       elif success == None:
         response = redirect("vault", permanent=True)
         messages.error(request, "Connection Error")
@@ -309,3 +315,38 @@ def logout(request):
       response.delete_cookie("email")
       response.delete_cookie("salt")
       return response
+
+
+
+def sessionEdit(request):
+  if request.method == "POST":
+    form = forms.SessionEdit(request.POST)
+    if form.is_valid():
+      data = {
+        "email":request.COOKIES.get("email"),
+        "sessionId":request.COOKIES.get("sessionId"),
+        "newName":form.cleaned_data["newName"],
+        "sessionIdW":form.cleaned_data["sessionIdW"]
+      }
+      url = f'{base_url}/session-edit/'
+
+      success, dict_response = sendRequestPost(url, data)
+      if success:
+        response = redirect("vault", permanent=True)
+        messages.success(request, "Session Saved")
+        return response
+      elif success == None:
+        response = redirect("vault", permanent=True)
+        messages.error(request, "Connection Error")
+        return response
+      else:
+        response = redirect("vault", permanent=True)
+        messages.error(request, dict_response["errorMessage"])
+        return response
+    else:
+      response = redirect("vault", permanent=True)
+      messages.error(request, "Invalid Form")
+      return response
+
+  else:
+    return HttpResponse("method not allowed")

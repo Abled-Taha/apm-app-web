@@ -58,6 +58,30 @@ function closePopupSettings() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
+function openPopupSessions() {
+  closePopupSettings()
+  document.getElementById("popup-sessions").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupSessions() {
+  document.getElementById("popup-sessions").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
+function openPopupSession(name, sessionId) {
+  closePopupSessions()
+  document.getElementById("id_newSessionName").value = name;
+  document.getElementById("id_sessionIdW").value = sessionId;
+  document.getElementById("popup-session").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupSession() {
+  document.getElementById("popup-session").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
 function openPopupEdit(id, name, username, password, url) {
   document.getElementById("id_newName").value = name;
   document.getElementById("id_newUsername").value = username;
@@ -80,6 +104,8 @@ function handleKeyDown(event) {
     closePopupAdd();
     closePopupEdit();
     closePopupSettings();
+    closePopupSessions();
+    closePopupSession();
   }
 }
 

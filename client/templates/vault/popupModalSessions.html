@@ -1,0 +1,23 @@
+<div id="popup-sessions" class="modal">
+  <div class="modal-content">
+      <span class="close" id="popup-sessions-close" onclick="closePopupSessions()">&times;</span>
+      <br>
+      {% for entry in sessions %}
+        {% for key, value in entry.items %}
+          {% if key == "name" %}
+            {% for key1, value1 in entry.items %}
+              {% if key1 == "sessionId" %}
+                {% if value == "" %}
+                  <button class="popup-settings-buttons" onclick="openPopupSession('{{value}}', '{{value1}}')">"No Name"</button>
+                  <br>
+                {% else %}
+                  <button class="popup-settings-buttons" onclick="openPopupSession('{{value}}', '{{value1}}')">{{value}}</button>
+                  <br>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+  </div>
+</div>
