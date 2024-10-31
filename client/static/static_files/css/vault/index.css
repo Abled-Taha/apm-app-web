@@ -407,3 +407,19 @@ button:hover {
 #id_SessionDeleteSessionIdW {
   display: none;
 }
+
+.logo img {
+  width: 50px;
+  height: 50px;
+}
+
+.logo img:hover {
+  cursor: pointer;
+}
+
+.logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}

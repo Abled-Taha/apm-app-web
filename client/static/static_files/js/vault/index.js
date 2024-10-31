@@ -110,6 +110,28 @@ function handleKeyDown(event) {
   }
 }
 
+function handleKeyDownMain(event) {
+  if (document.activeElement.id === 'search') {
+    return;
+  }
+  if (event.key === "a") {
+    openPopupAdd();
+  }
+  if (event.key === "s") {
+    openPopupSettings();
+  }
+  if (event.key === "/") {
+    if (event.ctrlKey) {
+      document.getElementById('search').value = '';
+      document.getElementById('search').focus();
+      event.preventDefault();
+    } else {
+      document.getElementById('search').focus();
+      event.preventDefault();
+    }
+  }
+}
+
 function filterVault() {
   const searchValue = document.getElementById('search').value.toLowerCase();
   const vaultItems = document.querySelectorAll('.vault-item');
@@ -154,3 +176,5 @@ function simulateAnchorClick(href) {
   a.href = href;
   a.click();
 }
+
+document.addEventListener('keydown', handleKeyDownMain)
