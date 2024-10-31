@@ -148,7 +148,7 @@ def vault(request):
           sessions = dict_response1["sessionIds"]
         else:
           sessions = []
-        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'sessions':sessions})
+        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'sessions':sessions})
       elif success == None:
         response = redirect("vault", permanent=True)
         messages.error(request, "Connection Error")
@@ -325,7 +325,7 @@ def sessionEdit(request):
       data = {
         "email":request.COOKIES.get("email"),
         "sessionId":request.COOKIES.get("sessionId"),
-        "newName":form.cleaned_data["newName"],
+        "newName":form.cleaned_data["newSessionName"],
         "sessionIdW":form.cleaned_data["sessionIdW"]
       }
       url = f'{base_url}/session-edit/'
@@ -350,3 +350,36 @@ def sessionEdit(request):
 
   else:
     return HttpResponse("method not allowed")
+  
+
+
+def sessionDelete(request):
+  if request.method == "POST":
+    form = forms.SessionDelete(request.POST)
+    if form.is_valid():
+      data = {
+        "email" : request.COOKIES.get("email"),
+        "sessionId" : request.COOKIES.get("sessionId"),
+        "sessionIdW" : form.cleaned_data["SessionDeleteSessionIdW"]
+      }
+
+      url = f'{base_url}/session-delete/'
+
+      success, dict_response = sendRequestPost(url, data)
+      if success:
+        response = redirect("vault")
+        return response
+      elif success == None:
+        response = redirect("vault", permanent=True)
+        messages.error(request, "Connection Error")
+        return response
+      else:
+        response = redirect("vault", permanent=True)
+        messages.error(request, dict_response["errorMessage"])
+        return response
+    else:
+      response = redirect("vault", permanent=True)
+      messages.error(request, "Invalid Form")
+      return response
+  else:
+    return HttpResponse("Method not allowed")

@@ -381,7 +381,15 @@ button:hover {
 }
 
 .popup-settings-buttons:hover {
-  background-color: rgb(131, 131, 131);
+  background-color: rgb(141, 141, 141);
+}
+
+.popup-settings-buttons-red {
+  background-color: rgb(224, 15, 15);
+}
+
+.popup-settings-buttons-red:hover {
+  background-color: rgb(185, 15, 15);
 }
 
 #popup-session-id {
@@ -389,5 +397,13 @@ button:hover {
 }
 
 #id_sessionIdW {
+  display: none;
+}
+
+#popup-session-SessionDeleteSessionIdW {
+  display: none;
+}
+
+#id_SessionDeleteSessionIdW {
   display: none;
 }

@@ -30,3 +30,6 @@ class VaultEdit(forms.Form):
 class SessionEdit(forms.Form):
     sessionIdW = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the session idw"}))
     newSessionName = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the name"}))
+
+class SessionDelete(forms.Form):
+    SessionDeleteSessionIdW = forms.CharField(label="", max_length=100, widget=forms.TextInput({"placeholder":"Enter the session idw"}))

@@ -73,6 +73,7 @@ function openPopupSession(name, sessionId) {
   closePopupSessions()
   document.getElementById("id_newSessionName").value = name;
   document.getElementById("id_sessionIdW").value = sessionId;
+  document.getElementById("id_SessionDeleteSessionIdW").value = sessionId;
   document.getElementById("popup-session").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
 }
