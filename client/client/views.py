@@ -61,6 +61,7 @@ def signin(request):
         response.set_cookie("email", data["email"], max_age=60*60*24*365)
         response.set_cookie("password", data["password"], max_age=60*60*24*365)
         response.set_cookie("salt", dict_response["salt"], max_age=60*60*24*365)
+        response.set_cookie("username", dict_response["username"], max_age=60*60*24*365)
         return response
       elif success == None:
         response = redirect("signin", permanent=True)
