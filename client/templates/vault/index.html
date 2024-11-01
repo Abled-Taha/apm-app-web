@@ -45,6 +45,7 @@
                 {% elif key == "username" %}
                 <p>{{ value }}</p>
                 {% elif key == "url" %}
+                <img src="https://s2.googleusercontent.com/s2/favicons?domain={{value}}" alt="url-logo">
                 <p>{{ value }}</p>
                 {% endif %}
               {% endfor %}
