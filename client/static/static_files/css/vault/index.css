@@ -423,3 +423,21 @@ button:hover {
   justify-content: center;
   align-items: center;
 }
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.profile-picture{
+  border: 2px solid black;
+  border-radius: 5em;
+  overflow: hidden;
+}
+
+.profile-picture img {
+  width: 150px;
+  height: 150px;
+}

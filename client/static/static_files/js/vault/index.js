@@ -83,6 +83,19 @@ function closePopupSession() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
+function openPopupUserSettings() {
+  closePopupSettings()
+  document.getElementById("username").textContent = "Username: " + getCookie('username')
+  document.getElementById("email").textContent = "Email: " + getCookie('email')
+  document.getElementById("popup-userSettings").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupUserSettings() {
+  document.getElementById("popup-userSettings").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
 function openPopupEdit(id, name, username, password, url) {
   document.getElementById("id_newName").value = name;
   document.getElementById("id_newUsername").value = username;
@@ -175,6 +188,16 @@ function simulateAnchorClick(href) {
   const a = document.createElement('a');
   a.href = href;
   a.click();
+}
+
+function getCookie(name) {
+  let cookie = {};
+  document.cookie.split(';').forEach(function(el) {
+    let split = el.split('=');
+    let value = split.slice(1).join("=").replace(/"/g, '');
+    cookie[split[0].trim()] = value;
+  })
+  return cookie[name];
 }
 
 document.addEventListener('keydown', handleKeyDownMain)
