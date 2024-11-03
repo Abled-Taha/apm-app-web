@@ -13,7 +13,6 @@
 7. Visit http://127.0.0.1:8080 and see it running
 
 ### Todo
-1. User Settings
 2. User Details Changing
 3. Import, Export Vault, Encrypted and Decrypted
 4. Profile Picture
@@ -32,4 +31,4 @@
 17. Password History
 18. Biometric Access
 19. Offline Access
-20. Log
+20. Logs
