@@ -304,6 +304,8 @@ button:hover {
 .password-wrapper {
   position: relative;
   width: 100%;
+  display: flex;
+  flex-direction: row;
 }
 
 .password-wrapper input {
@@ -312,10 +314,11 @@ button:hover {
 }
 
 .password-wrapper i {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  /* position: absolute; */
+  /* right: 10px; */
+  /* top: 50%; */
+  transform: translateY(30%);
+  margin-left: 0.5em;
   cursor: pointer;
   color: #666;
 }
