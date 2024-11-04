@@ -38,7 +38,18 @@ function closePopupDelete() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
+function openPopupAdd() {
+  document.getElementById("popup-add").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupAdd() {
+  document.getElementById("popup-add").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
 function openPopupAddPassword() {
+  closePopupAdd()
   document.getElementById("popup-addPassword").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
 }
@@ -118,6 +129,7 @@ function handleKeyDown(event) {
   if (event.key === "Escape") {
     closePopup();
     closePopupDelete();
+    closePopupAdd();
     closePopupAddPassword();
     closePopupEdit();
     closePopupSettings();
@@ -131,7 +143,7 @@ function handleKeyDownMain(event) {
     return;
   }
   if (event.key === "a") {
-    openPopupAddPassword();
+    openPopupAdd();
   }
   if (event.key === "s") {
     openPopupSettings();
