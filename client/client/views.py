@@ -141,6 +141,8 @@ def vault(request):
 
       if success:
         for value in dict_response["passwords"]:
+          noteDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["note"])
+          value["note"] = noteDecrypt
           passwordDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["password"])
           value["password"] = passwordDecrypt
         url = f'{base_url}/session-get/'
@@ -185,19 +187,23 @@ def vaultNew(request):
         form.cleaned_data["password"] = ""
       if form.cleaned_data.get("url") == None:
         form.cleaned_data["url"] = ""
+      if form.cleaned_data.get("note") == None:
+        form.cleaned_data["note"] = ""
 
       passwordEncrypt = encryptor.encrypt(request.COOKIES.get("salt"), form.cleaned_data["password"], request.COOKIES.get("password"))
+      noteEncrypt = encryptor.encrypt(request.COOKIES.get("salt"), form.cleaned_data["note"], request.COOKIES.get("password"))
       data = {
         "email":request.COOKIES.get("email"),
         "sessionId":request.COOKIES.get("sessionId"),
         "name":form.cleaned_data["name"],
         "username":form.cleaned_data["username"],
         "password":passwordEncrypt,
-        "url":form.cleaned_data["url"]
+        "url":form.cleaned_data["url"],
+        "note":noteEncrypt
       }
       url = f'{base_url}/vault-new/'
-
       success, dict_response = sendRequestPost(url, data)
+
       if success:
         response = redirect("vault", permanent=True)
         messages.success(request, "Password Added")
@@ -226,18 +232,28 @@ def vaultEdit(request):
   if request.method == "POST":
     form = forms.VaultEdit(request.POST)
     if form.is_valid():
-      try:
-        newUrl = form.cleaned_data["newUrl"]
-      except:
-        newUrl = ""
+
+      if form.cleaned_data.get("newName") == None:
+        form.cleaned_data["newName"] = ""
+      if form.cleaned_data.get("newUsername") == None:
+        form.cleaned_data["newUsername"] = ""
+      if form.cleaned_data.get("newPassword") == None:
+        form.cleaned_data["newPassword"] = ""
+      if form.cleaned_data.get("newUrl") == None:
+        form.cleaned_data["newUrl"] = ""
+      if form.cleaned_data.get("newNote") == None:
+        form.cleaned_data["newNote"] = ""
+
       passwordEncrypt = encryptor.encrypt(request.COOKIES.get("salt"), form.cleaned_data["newPassword"], request.COOKIES.get("password"))
+      noteEncrypt = encryptor.encrypt(request.COOKIES.get("salt"), form.cleaned_data["newNote"], request.COOKIES.get("password"))
       data = {
         "email":request.COOKIES.get("email"),
         "sessionId":request.COOKIES.get("sessionId"),
         "newName":form.cleaned_data["newName"],
         "newUsername":form.cleaned_data["newUsername"],
         "newPassword":passwordEncrypt,
-        "newUrl":newUrl,
+        "newUrl":form.cleaned_data["newUrl"],
+        "newNote":noteEncrypt,
         "id":form.cleaned_data["id"]
       }
       url = f'{base_url}/vault-edit/'

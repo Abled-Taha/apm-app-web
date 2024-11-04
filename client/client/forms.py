@@ -17,16 +17,18 @@ class VaultNew(forms.Form):
     username = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the username"}), required=False)
     password = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Create a password"}), required=False)
     url = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the url"}), required=False)
+    note = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the note"}), required=False)
 
 class VaultDelete(forms.Form):
     id = forms.IntegerField(label="", widget=forms.NumberInput({"placeholder":"Enter the ID"}))
 
 class VaultEdit(forms.Form):
-    id = forms.IntegerField(label="", widget=forms.NumberInput({"placeholder":"Enter the ID", "id":"id_popup-edit-id"}))
-    newName = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the name"}))
-    newUsername = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the username"}))
-    newPassword = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Create a password"}))
+    id = forms.IntegerField(label="", widget=forms.NumberInput({"placeholder":"Enter the ID", "id":"id_popup-edit-id"}), required=False)
+    newName = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the name"}), required=False)
+    newUsername = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the username"}), required=False)
+    newPassword = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Create a password"}), required=False)
     newUrl = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the url"}), required=False)
+    newNote = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the note"}), required=False)
 
 class SessionEdit(forms.Form):
     sessionIdW = forms.CharField(label="",  max_length=100, widget=forms.TextInput({"placeholder":"Enter the session idw"}))

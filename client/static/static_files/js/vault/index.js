@@ -1,14 +1,15 @@
-function openPopup(website, username, password, url, id) {
+function openPopup(website, username, password, url, note, id) {
   document.getElementById("popup-details-website").textContent = website;
   document.getElementById("popup-details-username").textContent = username;
   document.getElementById("popup-details-password").textContent = password;
   document.getElementById("popup-details-url").textContent = url;
+  document.getElementById("popup-details-note").textContent = note;
   document.getElementById("popup-details-id").textContent = id;
   document.getElementById("popup-details-button-copy").onclick = function() {
     copyPassword(password)
   }
   document.getElementById("popup-details-button-edit").onclick = function() {
-    editPassword(id, website, username, password, url)
+    editPassword(id, website, username, password, url, note)
   }
   document.getElementById("popup-details").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
@@ -110,11 +111,12 @@ function closePopupUserSettings() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
-function openPopupEdit(id, name, username, password, url) {
+function openPopupEdit(id, name, username, password, url, note) {
   document.getElementById("id_newName").value = name;
   document.getElementById("id_newUsername").value = username;
   document.getElementById("id_newPassword").value = password;
   document.getElementById("id_newUrl").value = url;
+  document.getElementById("id_newNote").value = note;
   document.getElementById("id_popup-edit-id").value = id;
   document.getElementById("popup-edit").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
@@ -194,9 +196,9 @@ function togglePasswordVisibility() {
   }
 }
 
-function editPassword(id, name, username, password, url) {
+function editPassword(id, name, username, password, url, note) {
   closePopup()
-  openPopupEdit(id, name, username, password, url)
+  openPopupEdit(id, name, username, password, url, note)
 }
 
 function simulateAnchorClick(href) {

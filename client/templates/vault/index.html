@@ -37,7 +37,7 @@
 
     <div class="vault-list">
       {% for entry in passwords %}
-        <div class="vault-item" onclick="openPopup('{{entry.name}}', '{{entry.username}}', '{{entry.password}}', '{{entry.url}}', '{{entry.id}}')">
+        <div class="vault-item" onclick="openPopup('{{entry.name}}', '{{entry.username}}', '{{entry.password}}', '{{entry.url}}', '{{entry.note}}', '{{entry.id}}')">
             <div class="item-details">
               {% for key, value in entry.items %}
                 {% if key == "name" %}
