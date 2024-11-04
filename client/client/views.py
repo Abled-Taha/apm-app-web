@@ -176,10 +176,16 @@ def vaultNew(request):
   if request.method == "POST":
     form = forms.VaultNew(request.POST)
     if form.is_valid():
-      try:
-        url = form.cleaned_data["url"]
-      except:
-        url = ""
+
+      if form.cleaned_data.get("name") == None:
+        form.cleaned_data["name"] = ""
+      if form.cleaned_data.get("username") == None:
+        form.cleaned_data["username"] = ""
+      if form.cleaned_data.get("password") == None:
+        form.cleaned_data["password"] = ""
+      if form.cleaned_data.get("url") == None:
+        form.cleaned_data["url"] = ""
+
       passwordEncrypt = encryptor.encrypt(request.COOKIES.get("salt"), form.cleaned_data["password"], request.COOKIES.get("password"))
       data = {
         "email":request.COOKIES.get("email"),
@@ -187,7 +193,7 @@ def vaultNew(request):
         "name":form.cleaned_data["name"],
         "username":form.cleaned_data["username"],
         "password":passwordEncrypt,
-        "url":url
+        "url":form.cleaned_data["url"]
       }
       url = f'{base_url}/vault-new/'
 
