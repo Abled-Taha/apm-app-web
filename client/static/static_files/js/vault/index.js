@@ -244,4 +244,29 @@ function getCookie(name) {
   return cookie[name];
 }
 
+function generatePassword() {
+  // const smallLetters = document.getElementById("id_smallLetters").checked;
+  // const bigLetters = document.getElementById("id_bigLetters").checked;
+  // const digits = document.getElementById("id_digits").checked;
+  // const numericCharacters = document.getElementById("id_numericCharacters").checked;
+
+  const length = 16;
+
+  const lettersList = 'abcdefghijklmnopqrstuvwxyz';
+  const bigLettersList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const digitsList = '0123456789';
+  const numericCharactersList = '!@#$%^&*()_+~`|}{[]\?,.';
+
+  let characters = lettersList + bigLettersList + digitsList + numericCharactersList;
+
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  document.getElementById("id_password").value = result;
+  document.getElementById("id_newPassword").value = result;
+}
+
 document.addEventListener('keydown', handleKeyDownMain)

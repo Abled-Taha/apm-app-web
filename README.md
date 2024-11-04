@@ -20,8 +20,8 @@
 5. Forgot Password
 6. Extension
 7. Mobile App
-8. Password Generator
-9.  2FA
+8. Password Generator Config
+9. 2FA
 10. Auto Fill
 11. Password Strength Analysis
 12. Secure Notes
