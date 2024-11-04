@@ -188,20 +188,20 @@ header {
   visibility: hidden;
 }
 
-.add-body {
+.addPassword-body {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.add-container {
+.addPassword-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
-.add-box {
+.addPassword-box {
   background: #fff;
   padding: 40px;
   padding-bottom: 20px;
