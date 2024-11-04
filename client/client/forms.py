@@ -1,4 +1,5 @@
 from django import forms
+from django.core.validators import FileExtensionValidator
 
 class Signin(forms.Form):
     email = forms.EmailField(label="", max_length=100, widget=forms.EmailInput({"placeholder":"Enter your email"}))
@@ -33,3 +34,11 @@ class SessionEdit(forms.Form):
 
 class SessionDelete(forms.Form):
     SessionDeleteSessionIdW = forms.CharField(label="", max_length=100, widget=forms.TextInput({"placeholder":"Enter the session idw"}))
+
+class ImageUpdate(forms.Form):
+    image = forms.ImageField(
+    label="Profile Picture",
+    max_length=15,
+    validators=[FileExtensionValidator(allowed_extensions=['jpg'])],
+    widget=forms.FileInput(attrs={'accept': '.jpg'}),
+)

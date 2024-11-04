@@ -28,6 +28,6 @@ def decryptor(salt, masterPassword, passwordEncrypt):
   masterPassword = masterPassword.encode()
   key = base64.urlsafe_b64encode(kdf.derive(masterPassword))
   f = Fernet(key)
-  passwordEncrypt = passwordEncrypt.removeprefix("b").encode()
+  passwordEncrypt = passwordEncrypt.removeprefix("b").removesuffix("'").encode()
   passwordDecrypt = f.decrypt(passwordEncrypt)
   return passwordDecrypt.decode('utf-8')

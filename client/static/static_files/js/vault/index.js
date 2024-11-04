@@ -87,6 +87,9 @@ function openPopupUserSettings() {
   closePopupSettings()
   document.getElementById("username").textContent = "Username: " + getCookie('username')
   document.getElementById("email").textContent = "Email: " + getCookie('email')
+  document.getElementById('id_image').onchange = function() {
+    document.getElementById('image-form').submit();
+  };
   document.getElementById("popup-userSettings").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
 }
@@ -188,6 +191,11 @@ function simulateAnchorClick(href) {
   const a = document.createElement('a');
   a.href = href;
   a.click();
+}
+
+function simulateFieldClick(id) {
+  const field = document.getElementById(id);
+  field.click();
 }
 
 function getCookie(name) {

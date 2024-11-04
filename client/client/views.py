@@ -1,4 +1,4 @@
-import json, time, requests
+import json, time, requests, base64
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
@@ -147,9 +147,16 @@ def vault(request):
         success, dict_response1 = sendRequestPost(url, data)
         if success:
           sessions = dict_response1["sessionIds"]
+          url = f'{base_url}/pp-get/'
+          data["username"] = request.COOKIES.get("username")
+          success, dict_response2 = sendRequestPost(url, data)
+          if success:
+            pp = dict_response2["pp"].removeprefix("b'").removesuffix("'")
+          else:
+            pp = ""
         else:
           sessions = []
-        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'sessions':sessions})
+        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'formImageUpdate':forms.ImageUpdate(), 'sessions':sessions, 'pp':pp})
       elif success == None:
         response = redirect("vault", permanent=True)
         messages.error(request, "Connection Error")
@@ -384,3 +391,41 @@ def sessionDelete(request):
       return response
   else:
     return HttpResponse("Method not allowed")
+  
+
+
+def ppNew(request):
+  if request.method == "POST":
+    form = forms.ImageUpdate(request.POST, request.FILES)
+    if form.is_valid():
+      data = {
+        "email":request.COOKIES.get("email"),
+        "sessionId":request.COOKIES.get("sessionId"),
+        "username":request.COOKIES.get("username"),
+        "image":""
+      }
+      url = f'{base_url}/pp-new/'
+      image64 = base64.standard_b64encode(request.FILES["image"].read())
+      image64 = f"{image64}"
+      data["image"] = image64
+
+      success, dict_response = sendRequestPost(url, data)
+      if success:
+        response = redirect("vault", permanent=True)
+        messages.success(request, "Profile Picture Updated")
+        return response
+      elif success == None:
+        response = redirect("vault", permanent=True)
+        messages.error(request, "Connection Error")
+        return response
+      else:
+        response = redirect("vault", permanent=True)
+        messages.error(request, dict_response["errorMessage"])
+        return response
+    else:
+      print(form.errors)
+      response = redirect("vault", permanent=True)
+      messages.error(request, "Invalid Form")
+      return response
+  else:
+    return HttpResponse("method not allowed")

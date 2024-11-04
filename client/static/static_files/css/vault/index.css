@@ -441,3 +441,7 @@ button:hover {
   width: 150px;
   height: 150px;
 }
+
+#id_image {
+  display: none;
+}
