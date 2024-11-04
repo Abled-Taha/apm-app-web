@@ -13,22 +13,21 @@
 7. Visit http://127.0.0.1:8080 and see it running
 
 ### Todo
-2. User Details Changing
-3. Import, Export Vault, Encrypted and Decrypted
-4. Profile Picture
-5. Master Password Changing
-6. Email Changing
-7. Email Verification
-8. Forgot Password
-9. Extension
-10. Mobile App
-11. Password Generator
-12. 2FA
-13. Auto Fill
-14. Password Strength Analysis
-15. Secure Notes
-16. Emergency Contact Access
-17. Password History
-18. Biometric Access
-19. Offline Access
-20. Logs
+1. User Details Changing
+2. Import, Export Vault, Encrypted and Decrypted
+3. Master Password Changing
+4. Email Changing
+5. Email Verification
+6. Forgot Password
+7. Extension
+8. Mobile App
+9. Password Generator
+10. 2FA
+11. Auto Fill
+12. Password Strength Analysis
+13. Secure Notes
+14. Emergency Contact Access
+15. Password History
+16. Biometric Access
+17. Offline Access
+18. Logs
