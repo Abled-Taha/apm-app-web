@@ -141,7 +141,29 @@ function handleKeyDown(event) {
 }
 
 function handleKeyDownMain(event) {
-  if (document.activeElement.id === 'search') {
+  if (
+    document.activeElement.id === 'search' || 
+    document.activeElement.id === 'id_password' || 
+    document.activeElement.id === 'id_newPassword' ||  
+    document.activeElement.id === 'id_newSessionName' || 
+    document.activeElement.id === 'id_username' || 
+    document.activeElement.id === 'id_newUsername' || 
+    document.activeElement.id === 'id_name' || 
+    document.activeElement.id === 'id_newName' || 
+    document.activeElement.id === 'id_url' || 
+    document.activeElement.id === 'id_newUrl' || 
+    document.activeElement.id === 'id_note' || 
+    document.activeElement.id === 'id_newNote' ||
+    document.getElementById("popup-details").style.display === "flex" ||
+    document.getElementById("popup-edit").style.display === "flex" ||
+    document.getElementById("popup-addPassword").style.display === "flex" ||
+    document.getElementById("popup-add").style.display === "flex" ||
+    document.getElementById("popup-settings").style.display === "flex" ||
+    document.getElementById("popup-sessions").style.display === "flex" ||
+    document.getElementById("popup-session").style.display === "flex" ||
+    document.getElementById("popup-userSettings").style.display === "flex" ||
+    document.getElementById("popup-delete").style.display === "flex"
+  ) {
     return;
   }
   if (event.key === "a") {
