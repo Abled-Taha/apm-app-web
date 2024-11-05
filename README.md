@@ -15,18 +15,16 @@
 ### Todo
 1. Import, Export Vault, Encrypted and Decrypted
 2. Master Password Changing
-3. Email Changing
-4. Email Verification
-5. Forgot Password
-6. Extension
-7. Mobile App
-8. Password Generator Config
-9. 2FA
-10. Auto Fill
-11. Password Strength Analysis
-12. Secure Notes
-13. Emergency Contact Access
-14. Password History
-15. Biometric Access
-16. Offline Access
-17. Logs
+3. Email Verification
+4. Forgot Password
+5. Extension
+6. Mobile App
+7. Password Generator Config
+8. 2FA
+9.  Auto Fill
+10. Password Strength Analysis
+11. Emergency Contact Access
+12. Password History
+13. Biometric Access
+14. Offline Access
+15. Logs
