@@ -12,5 +12,6 @@ urlpatterns = [
     path("session-edit/", views.sessionEdit, name="sessionEdit"),
     path("session-delete/", views.sessionDelete, name="sessionDelete"),
     path("pp-new/", views.ppNew, name="ppNew"),
+    path("export-apm-json-0/", views.exportApmJson0, name="exportApmJson0"),
     path("logout/", views.logout, name="logout"),
 ]

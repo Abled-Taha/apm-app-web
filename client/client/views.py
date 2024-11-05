@@ -1,4 +1,4 @@
-import json, time, requests, base64
+import json, time, requests, base64, datetime
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
@@ -21,21 +21,21 @@ def home(request):
 
 
 def sendRequestPost(url, data):
-      attempt_num = 0
-      while attempt_num < ConfigObj.max_retries:
-        try:
-          response = requests.post(url, json=data)
-          dict_response = response.json()
+  attempt_num = 0
+  while attempt_num < ConfigObj.max_retries:
+    try:
+      response = requests.post(url, json=data)
+      dict_response = response.json()
 
-          if dict_response["errorCode"] == 0:
-            return True, dict_response
+      if dict_response["errorCode"] == 0:
+        return True, dict_response
           
-          else:
-            return False, dict_response
-        except:
-          attempt_num += 1
-          time.sleep(2)
-      return None, {}
+      else:
+        return False, dict_response
+    except:
+      attempt_num += 1
+      time.sleep(2)
+  return None, {}
 
 
 
@@ -451,3 +451,43 @@ def ppNew(request):
       return response
   else:
     return HttpResponse("method not allowed")
+
+
+
+def exportApmJson0(request):
+  if request.method != "GET":
+    return(JsonResponse({"errorCode":1, "errorMessage":"Method not Allowed."}))
+  else:
+    url = f'{base_url}/vault-get/'
+    data = {
+      "email":request.COOKIES.get("email"),
+      "sessionId":request.COOKIES.get("sessionId")
+    }
+    success, dict_response = sendRequestPost(url, data)
+
+    if success:
+      for value in dict_response["passwords"]:
+        noteDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["note"])
+        value["note"] = noteDecrypt
+        passwordDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["password"])
+        value["password"] = passwordDecrypt
+
+      export = {
+        "items":[
+
+        ]
+      }
+      for value in dict_response["passwords"]:
+        export["items"].append(value)
+      
+      response = JsonResponse(export, safe=False)
+      response['Content-Disposition'] = f'attachment; filename=export-apm-json-0_{datetime.datetime.now(datetime.timezone.utc).isoformat()}.json'
+      return response
+    elif success == None:
+      response = redirect("vault", permanent=True)
+      messages.error(request, "Connection Error")
+      return response
+    else:
+      response = redirect("vault", permanent=True)
+      messages.error(request, dict_response["errorMessage"])
+      return response

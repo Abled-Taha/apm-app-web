@@ -127,16 +127,28 @@ function closePopupEdit() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
+function openPopupExport() {
+  closePopupSettings()
+  document.getElementById("popup-export").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupExport() {
+  document.getElementById("popup-export").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
 function handleKeyDown(event) {
   if (event.key === "Escape") {
     closePopup();
-    closePopupDelete();
     closePopupAdd();
     closePopupAddPassword();
+    closePopupDelete();
     closePopupEdit();
-    closePopupSettings();
-    closePopupSessions();
+    closePopupExport();
     closePopupSession();
+    closePopupSessions();
+    closePopupSettings();
   }
 }
 
@@ -159,6 +171,7 @@ function handleKeyDownMain(event) {
     document.getElementById("popup-addPassword").style.display === "flex" ||
     document.getElementById("popup-delete").style.display === "flex" ||
     document.getElementById("popup-edit").style.display === "flex" ||
+    document.getElementById("popup-export").style.display === "flex" ||
     document.getElementById("popup-session").style.display === "flex" ||
     document.getElementById("popup-sessions").style.display === "flex" ||
     document.getElementById("popup-settings").style.display === "flex" ||
