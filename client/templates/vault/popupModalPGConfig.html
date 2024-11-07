@@ -1,0 +1,18 @@
+<div id="popup-pGConfig" class="modal">
+  <div class="modal-content">
+    <span class="close" id="popup-edit-close" onclick="closePopupPGConfig()">&times;</span>
+    <div class="pGConfig">
+      <form action="/pgconfig/" method="post">
+        {% csrf_token %}
+        {{formPGConfig.length}}
+        <div class="checkboxes">
+          <span>Contain Captial Letters {{formPGConfig.capitalLetters}} </span>
+          <span>Contain Small Letters {{formPGConfig.smallLetters}} </span>
+          <span>Contain Numbers {{formPGConfig.numbers}} </span>
+          <span>Contain Symbols {{formPGConfig.symbols}} </span>
+        </div>
+        <button type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+</div>

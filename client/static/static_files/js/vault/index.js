@@ -138,6 +138,49 @@ function closePopupExport() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
+function openPopupPGConfig() {
+  closePopupSettings()
+  document.getElementById("id_length").value = getCookie("pGConfigLength")
+  document.getElementById("id_smallLetters").checked = getCookie("pGConfigSmallLetters")
+  document.getElementById("id_capitalLetters").checked = getCookie("pGConfigCapitalLetters")
+  document.getElementById("id_numbers").checked = getCookie("pGConfigNumbers")
+  document.getElementById("id_symbols").checked = getCookie("pGConfigSymbols")
+  if (getCookie("pGConfigSmallLetters") === "True") {
+    document.getElementById("id_smallLetters").checked = true
+  }
+  else {
+    document.getElementById("id_smallLetters").checked = false
+  }
+
+  if (getCookie("pGConfigCapitalLetters") === "True") {
+    document.getElementById("id_capitalLetters").checked = true
+  }
+  else {
+    document.getElementById("id_capitalLetters").checked = false
+  }
+
+  if (getCookie("pGConfigNumbers") === "True") {
+    document.getElementById("id_numbers").checked = true
+  }
+  else {
+    document.getElementById("id_numbers").checked = false
+  }
+
+  if (getCookie("pGConfigSymbols") === "True") {
+    document.getElementById("id_symbols").checked = true
+  }
+  else {
+    document.getElementById("id_symbols").checked = false
+  }
+  document.getElementById("popup-pGConfig").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupPGConfig() {
+  document.getElementById("popup-pGConfig").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
 function handleKeyDown(event) {
   if (event.key === "Escape") {
     closePopup();
@@ -146,6 +189,7 @@ function handleKeyDown(event) {
     closePopupDelete();
     closePopupEdit();
     closePopupExport();
+    closePopupPGConfig();
     closePopupSession();
     closePopupSessions();
     closePopupSettings();
@@ -166,12 +210,14 @@ function handleKeyDownMain(event) {
     document.activeElement.id === 'id_note' || 
     document.activeElement.id === 'id_newNote' ||
     document.activeElement.id === 'id_newSessionName' || 
+    document.activeElement.id === 'id_length' || 
     document.getElementById("popup-details").style.display === "flex" ||
     document.getElementById("popup-add").style.display === "flex" ||
     document.getElementById("popup-addPassword").style.display === "flex" ||
     document.getElementById("popup-delete").style.display === "flex" ||
     document.getElementById("popup-edit").style.display === "flex" ||
     document.getElementById("popup-export").style.display === "flex" ||
+    document.getElementById("popup-pGConfig").style.display === "flex" ||
     document.getElementById("popup-session").style.display === "flex" ||
     document.getElementById("popup-sessions").style.display === "flex" ||
     document.getElementById("popup-settings").style.display === "flex" ||
@@ -258,19 +304,31 @@ function getCookie(name) {
 }
 
 function generatePassword() {
-  // const smallLetters = document.getElementById("id_smallLetters").checked;
-  // const bigLetters = document.getElementById("id_bigLetters").checked;
-  // const digits = document.getElementById("id_digits").checked;
-  // const numericCharacters = document.getElementById("id_numericCharacters").checked;
+  const smallLetters = getCookie("pGConfigSmallLetters");
+  const capitalLetters = getCookie("pGConfigCapitalLetters");
+  const numbers = getCookie("pGConfigNumbers");
+  const symbols = getCookie("pGConfigSymbols");
 
-  const length = 16;
+  const length = getCookie("pGConfigLength");
 
-  const lettersList = 'abcdefghijklmnopqrstuvwxyz';
-  const bigLettersList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const digitsList = '0123456789';
-  const numericCharactersList = '!@#$%^&*()_+~`|}{[]\?,.';
+  const smallLettersList = 'abcdefghijklmnopqrstuvwxyz';
+  const capitalLettersList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const numbersList = '0123456789';
+  const symbolsList = '!@#$%^&*()_+~`|}{[]\?,.';
 
-  let characters = lettersList + bigLettersList + digitsList + numericCharactersList;
+  let characters = '';
+  if (smallLetters === "True") {
+    characters += smallLettersList;
+  }
+  if (capitalLetters === "True") {
+    characters += capitalLettersList;
+  }
+  if (numbers === "True") {
+    characters += numbersList;
+  }
+  if (symbols === "True") {
+    characters += symbolsList;
+  }
 
   let result = '';
   for (let i = 0; i < length; i++) {

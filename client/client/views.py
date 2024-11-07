@@ -1,4 +1,4 @@
-import json, time, requests, base64, datetime
+import time, requests, base64, datetime
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
@@ -158,7 +158,7 @@ def vault(request):
             pp = ""
         else:
           sessions = []
-        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'formImageUpdate':forms.ImageUpdate(), 'sessions':sessions, 'pp':pp})
+        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'formImageUpdate':forms.ImageUpdate(), 'formPGConfig':forms.PGConfig(), 'sessions':sessions, 'pp':pp})
       elif success == None:
         response = redirect("vault", permanent=True)
         messages.error(request, "Connection Error")
@@ -491,3 +491,24 @@ def exportApmJson0(request):
       response = redirect("vault", permanent=True)
       messages.error(request, dict_response["errorMessage"])
       return response
+    
+
+
+def pGConfig(request):
+  if request.method == "POST":
+    form = forms.PGConfig(request.POST)
+    if form.is_valid():
+      response = redirect("vault", permanent=True)
+      response.set_cookie("pGConfigLength", form.cleaned_data["length"], max_age=365*24*60*60)
+      response.set_cookie("pGConfigCapitalLetters", form.cleaned_data["capitalLetters"], max_age=365*24*60*60)
+      response.set_cookie("pGConfigSmallLetters", form.cleaned_data["smallLetters"], max_age=365*24*60*60)
+      response.set_cookie("pGConfigNumbers", form.cleaned_data["numbers"], max_age=365*24*60*60)
+      response.set_cookie("pGConfigSymbols", form.cleaned_data["symbols"], max_age=365*24*60*60)
+      messages.success(request, "Password Generation Config Saved")
+      return response
+    else:
+      response = redirect("vault", permanent=True)
+      messages.error(request, "Invalid Form")
+      return response
+  else:
+    return HttpResponse("method not allowed")

@@ -44,3 +44,10 @@ class ImageUpdate(forms.Form):
     validators=[FileExtensionValidator(allowed_extensions=['jpg'])],
     widget=forms.FileInput(attrs={'accept': '.jpg'}),
 )
+    
+class PGConfig(forms.Form):
+    length = forms.IntegerField(label="", min_value=1, widget=forms.NumberInput({"placeholder":"Enter the length"}))
+    capitalLetters = forms.BooleanField(label="", widget=forms.CheckboxInput({"placeholder":"Should contain capital letters"}), required=False)
+    smallLetters = forms.BooleanField(label="", widget=forms.CheckboxInput({"placeholder":"Should contain small letters"}), required=False)
+    numbers = forms.BooleanField(label="", widget=forms.CheckboxInput({"placeholder":"Should contain numbers"}), required=False)
+    symbols = forms.BooleanField(label="", widget=forms.CheckboxInput({"placeholder":"Should contain symbols"}), required=False)

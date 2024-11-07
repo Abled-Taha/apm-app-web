@@ -448,3 +448,24 @@ button:hover {
 #id_image {
   display: none;
 }
+
+.pGConfig {
+  margin-top: 1em;
+  padding: 1em;
+}
+
+.pGConfig .checkboxes {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5em;
+}
+
+.pGConfig .checkboxes span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pGConfig .checkboxes span input {
+  width: auto;
+}
