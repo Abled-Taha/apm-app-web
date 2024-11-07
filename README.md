@@ -19,12 +19,11 @@
 4. Forgot Password
 5. Extension
 6. Mobile App
-7. Password Generator Config
-8. 2FA
-9.  Auto Fill
-10. Password Strength Analysis
-11. Emergency Contact Access
-12. Password History
-13. Biometric Access
-14. Offline Access
-15. Logs
+7. 2FA
+8.  Auto Fill
+9.  Password Strength Analysis
+10. Emergency Contact Access
+11. Password History
+12. Biometric Access
+13. Offline Access
+14. Logs
