@@ -128,13 +128,24 @@ function closePopupEdit() {
 }
 
 function openPopupExport() {
-  closePopupSettings()
+  closePopupVaultSettings()
   document.getElementById("popup-export").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
 }
 
 function closePopupExport() {
   document.getElementById("popup-export").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
+function openPopupVaultSettings() {
+  closePopupSettings()
+  document.getElementById("popup-vaultSettings").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupVaultSettings() {
+  document.getElementById("popup-vaultSettings").style.display = "none";
   document.removeEventListener('keydown', handleKeyDown);
 }
 
@@ -193,6 +204,7 @@ function handleKeyDown(event) {
     closePopupSession();
     closePopupSessions();
     closePopupSettings();
+    closePopupVaultSettings();
   }
 }
 
@@ -221,7 +233,8 @@ function handleKeyDownMain(event) {
     document.getElementById("popup-session").style.display === "flex" ||
     document.getElementById("popup-sessions").style.display === "flex" ||
     document.getElementById("popup-settings").style.display === "flex" ||
-    document.getElementById("popup-userSettings").style.display === "flex"
+    document.getElementById("popup-userSettings").style.display === "flex" ||
+    document.getElementById("popup-vaultSettings").style.display === "flex"
   ) {
     return;
   }
