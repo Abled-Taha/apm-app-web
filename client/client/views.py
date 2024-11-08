@@ -2,7 +2,7 @@ import json, time, requests, base64, datetime
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
-from .settings import ConfigObj
+from .settings import ConfigObj, LogHandlerObj
 from . import forms, encryptor
 
 base_url = f"http://{ConfigObj.server_host}:{ConfigObj.server_port}"
@@ -70,15 +70,20 @@ def signin(request):
         response.set_cookie("password", data["password"], max_age=60*60*24*365)
         response.set_cookie("salt", dict_response["salt"], max_age=60*60*24*365)
         response.set_cookie("username", dict_response["username"], max_age=60*60*24*365)
+
+        LogHandlerObj.write(f"Signin | OK | {data['email']} | {get_client_ip(request)}")
         return response
       elif success == None:
         response = redirect("signin", permanent=True)
         messages.error(request, "Connection Error")
+
+        LogHandlerObj.write(f"Signin | FAILED | {data['email']} | {get_client_ip(request)} | Connection Error")
         return response
       else:
         response = redirect("signin", permanent=True)
         messages.error(request, dict_response["errorMessage"])
-        # response.set_cookie("errorMessage", dict_response["errorMessage"])
+        
+        LogHandlerObj.write(f"Signin | FAILED | {data['email']} | {get_client_ip(request)} | {dict_response['errorMessage']}")
         return response
     else:
       response = redirect("signin", permanent=True)
@@ -110,14 +115,20 @@ def signup(request):
       if success:
         response = redirect("signin", permanent=True)
         messages.success(request, "Account Created")
+
+        LogHandlerObj.write(f"Signup | OK | {data['email']} | {get_client_ip(request)}")
         return response
       elif success == None:
         response = redirect("signup", permanent=True)
         messages.error(request, "Connection Error")
+
+        LogHandlerObj.write(f"Signup | FAILED | {data['email']} | {get_client_ip(request)} | Connection Error")
         return response
       else:
         response = redirect("signup", permanent=True)
         messages.error(request, dict_response["errorMessage"])
+
+        LogHandlerObj.write(f"Signup | FAILED | {data['email']} | {get_client_ip(request)} | {dict_response['errorMessage']}")
         return response
     else:
       response = redirect("signup", permanent=True)
@@ -341,10 +352,14 @@ def logout(request):
       response.delete_cookie("email")
       response.delete_cookie("sessionId")
       response.delete_cookie("password")
+
+      LogHandlerObj.write(f"Logout | OK | {request.COOKIES.get('email')} | {get_client_ip(request)}")
       return response
     elif success == None:
       response = redirect("vault", permanent=True)
       response.set_cookie("errorMessage", "Connection Error")
+
+      LogHandlerObj.write(f"Logout | FAILED | {request.COOKIES.get('email')} | {get_client_ip(request)} | Connection Error")
       return response
     else:
       response = redirect("signin", permanent=True)
@@ -352,6 +367,8 @@ def logout(request):
       response.delete_cookie("sessionId")
       response.delete_cookie("email")
       response.delete_cookie("salt")
+
+      LogHandlerObj.write(f"Logout | FAILED | {request.COOKIES.get('email')} | {get_client_ip(request)} | {dict_response['errorMessage']}")
       return response
 
 

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from django.core.management.commands.runserver import Command as runserver
 from Config import Config as ConfigClass
+from LogHandler import LogHandler as LogHandlerClass
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,6 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 global ConfigObj
 ConfigObj = ConfigClass(BASE_DIR)
 ConfigObj.readConfig()
+
+# Setting up Log Handler
+global LogHandlerObj
+LogHandlerObj = LogHandlerClass(BASE_DIR)
 
 # Changing the server port
 runserver.default_port = ConfigObj.client_port
