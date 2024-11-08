@@ -13,7 +13,7 @@
 7. Visit http://127.0.0.1:8080 and see it running
 
 ### Todo
-1. Import, Export Vault, Encrypted and Decrypted
+1. Support BitWarden Imports
 2. Master Password Changing
 3. Email Verification
 4. Forgot Password
