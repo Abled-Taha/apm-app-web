@@ -45,9 +45,29 @@ class ImageUpdate(forms.Form):
     widget=forms.FileInput(attrs={'accept': '.jpg'}),
 )
     
+    def clean_image(self):
+        image = self.cleaned_data['image']
+        if len(image.name) > 15:
+            raise forms.ValidationError("File name should not exceed 15 characters")
+        return image
+    
 class PGConfig(forms.Form):
     length = forms.IntegerField(label="", min_value=1, max_value=100, widget=forms.NumberInput({"placeholder":"Enter the length"}))
     capitalLetters = forms.BooleanField(label="", widget=forms.CheckboxInput({"placeholder":"Should contain capital letters"}), required=False)
     smallLetters = forms.BooleanField(label="", widget=forms.CheckboxInput({"placeholder":"Should contain small letters"}), required=False)
     numbers = forms.BooleanField(label="", widget=forms.CheckboxInput({"placeholder":"Should contain numbers"}), required=False)
     symbols = forms.BooleanField(label="", widget=forms.CheckboxInput({"placeholder":"Should contain symbols"}), required=False)
+
+class ImportVault(forms.Form):
+    file = forms.FileField(
+    label="Import Vault",
+    max_length=60,
+    validators=[FileExtensionValidator(allowed_extensions=['json'])],
+    widget=forms.FileInput(attrs={'accept': '.json'}),
+)
+    
+    def clean_file(self):
+        file = self.cleaned_data['file']
+        if len(file.name) > 60:
+            raise forms.ValidationError("File name should not exceed 60 characters")
+        return file

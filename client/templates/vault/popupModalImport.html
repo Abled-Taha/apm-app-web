@@ -1,0 +1,11 @@
+<div id="popup-import" class="modal">
+  <div class="modal-content">
+      <span class="close" id="popup-import-close" onclick="closePopupImport()">&times;</span>
+      <div class="options-div">
+        <form id="import-form" action="/import-vault/" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{formImportVault.file}}
+        </form>
+      </div>
+  </div>
+</div>

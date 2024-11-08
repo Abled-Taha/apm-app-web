@@ -138,6 +138,20 @@ function closePopupExport() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
+function openPopupImport() {
+  closePopupVaultSettings()
+  document.getElementById('id_file').onchange = function() {
+    document.getElementById('import-form').submit();
+  };
+  document.getElementById("popup-import").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupImport() {
+  document.getElementById("popup-import").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
 function openPopupVaultSettings() {
   closePopupSettings()
   document.getElementById("popup-vaultSettings").style.display = "flex";
@@ -192,6 +206,7 @@ function handleKeyDown(event) {
     closePopupDelete();
     closePopupEdit();
     closePopupExport();
+    closePopupImport();
     closePopupPGConfig();
     closePopupSession();
     closePopupSessions();
@@ -221,6 +236,7 @@ function handleKeyDownMain(event) {
     document.getElementById("popup-delete").style.display === "flex" ||
     document.getElementById("popup-edit").style.display === "flex" ||
     document.getElementById("popup-export").style.display === "flex" ||
+    document.getElementById("popup-import").style.display === "flex" ||
     document.getElementById("popup-pGConfig").style.display === "flex" ||
     document.getElementById("popup-session").style.display === "flex" ||
     document.getElementById("popup-sessions").style.display === "flex" ||

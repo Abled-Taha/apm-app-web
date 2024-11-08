@@ -1,4 +1,4 @@
-import time, requests, base64, datetime
+import json, time, requests, base64, datetime
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
@@ -158,7 +158,7 @@ def vault(request):
             pp = ""
         else:
           sessions = []
-        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'formImageUpdate':forms.ImageUpdate(), 'formPGConfig':forms.PGConfig(), 'sessions':sessions, 'pp':pp})
+        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'formImageUpdate':forms.ImageUpdate(), 'formPGConfig':forms.PGConfig(), 'formImportVault':forms.ImportVault(), 'sessions':sessions, 'pp':pp})
       elif success == None:
         response = redirect("vault", permanent=True)
         messages.error(request, "Connection Error")
@@ -447,7 +447,7 @@ def ppNew(request):
     else:
       print(form.errors)
       response = redirect("vault", permanent=True)
-      messages.error(request, "Invalid Form")
+      messages.error(request, form.errors["image"][0])
       return response
   else:
     return HttpResponse("method not allowed")
@@ -509,6 +509,57 @@ def pGConfig(request):
     else:
       response = redirect("vault", permanent=True)
       messages.error(request, "Invalid Form")
+      return response
+  else:
+    return HttpResponse("method not allowed")
+  
+
+
+def importVault(request):
+  if request.method == "POST":
+    form = forms.ImportVault(request.POST, request.FILES)
+    if form.is_valid():
+      try:
+        json_file = request.FILES['file']
+        json_data = json_file.read()
+        data_dict = json.loads(json_data)
+
+        email = request.COOKIES.get("email")
+        sessionId = request.COOKIES.get("sessionId")
+        salt = request.COOKIES.get("salt")
+        password = request.COOKIES.get("password")
+
+        url = f'{base_url}/vault-new/'
+        
+        for entry in data_dict["items"]:
+          entry["email"] = email
+          entry["sessionId"] = sessionId
+          entry["password"] = encryptor.encrypt(salt, entry["password"], password)
+          entry["note"] = encryptor.encrypt(salt, entry["note"], password)
+
+          success, dict_response = sendRequestPost(url, entry)
+          if success:
+            pass
+          elif success == None:
+            response = redirect("vault", permanent=True)
+            messages.error(request, "Connection Error")
+            return response
+          else:
+            response = redirect("vault", permanent=True)
+            messages.error(request, dict_response["errorMessage"])
+            return response
+          
+        response = redirect("vault", permanent=True)
+        messages.success(request, "Vault Imported")
+        return response
+      except Exception as e:
+        response = redirect("vault", permanent=True)
+        messages.error(request, "Invalid JSON file")
+        return response
+    else:
+      print(form.errors)
+      response = redirect("vault", permanent=True)
+      messages.error(request, form.errors["file"][0])
       return response
   else:
     return HttpResponse("method not allowed")
