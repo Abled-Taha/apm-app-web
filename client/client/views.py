@@ -39,18 +39,26 @@ def sendRequestPost(url, data):
 
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
+
 def signin(request):
   if request.method == "POST":
     form = forms.Signin(request.POST)
     if form.is_valid():
-      try:
-        sessionName = form.cleaned_data["sessionName"]
-      except:
-        sessionName = ""
+      if form.cleaned_data["sessionName"] == "":
+        form.cleaned_data["sessionName"] = get_client_ip(request)
       data = {
         "email":form.cleaned_data["email"],
         "password":form.cleaned_data["password"],
-        "sessionName":sessionName
+        "sessionName":form.cleaned_data["sessionName"]
       }
       url = f'{base_url}/signin/'
 
