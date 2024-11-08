@@ -156,33 +156,25 @@ function openPopupPGConfig() {
   document.getElementById("id_capitalLetters").checked = getCookie("pGConfigCapitalLetters")
   document.getElementById("id_numbers").checked = getCookie("pGConfigNumbers")
   document.getElementById("id_symbols").checked = getCookie("pGConfigSymbols")
+
+  document.getElementById("id_smallLetters").checked = false
+  document.getElementById("id_capitalLetters").checked = false
+  document.getElementById("id_numbers").checked = false
+  document.getElementById("id_symbols").checked = false
+
   if (getCookie("pGConfigSmallLetters") === "True") {
     document.getElementById("id_smallLetters").checked = true
   }
-  else {
-    document.getElementById("id_smallLetters").checked = false
-  }
-
   if (getCookie("pGConfigCapitalLetters") === "True") {
     document.getElementById("id_capitalLetters").checked = true
   }
-  else {
-    document.getElementById("id_capitalLetters").checked = false
-  }
-
   if (getCookie("pGConfigNumbers") === "True") {
     document.getElementById("id_numbers").checked = true
   }
-  else {
-    document.getElementById("id_numbers").checked = false
-  }
-
   if (getCookie("pGConfigSymbols") === "True") {
     document.getElementById("id_symbols").checked = true
   }
-  else {
-    document.getElementById("id_symbols").checked = false
-  }
+
   document.getElementById("popup-pGConfig").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
 }
