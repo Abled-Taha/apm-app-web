@@ -1,4 +1,4 @@
-import json, time, requests, base64, datetime
+import threading, json, time, requests, base64, datetime
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
@@ -159,11 +159,22 @@ def vault(request):
       success, dict_response = sendRequestPost(url, data)
 
       if success:
+        salt = request.COOKIES.get("salt")
+        password = request.COOKIES.get("password")
+
+        def handle_item(item):
+          item["note"] = encryptor.decryptor(salt, password, item["note"])
+          item["password"] = encryptor.decryptor(salt, password, item["password"])
+
+        threads = []
         for value in dict_response["passwords"]:
-          noteDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["note"])
-          value["note"] = noteDecrypt
-          passwordDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["password"])
-          value["password"] = passwordDecrypt
+          t = threading.Thread(target=handle_item, args=(value,))
+          t.start()
+          threads.append(t)
+
+        for t in threads:
+          t.join()
+
         url = f'{base_url}/session-get/'
         success, dict_response1 = sendRequestPost(url, data)
         if success:
@@ -547,36 +558,33 @@ def importVault(request):
       try:
         json_file = request.FILES['file']
         json_data = json_file.read()
-        data_dict = json.loads(json_data)
 
-        email = request.COOKIES.get("email")
-        sessionId = request.COOKIES.get("sessionId")
+        data_dict = json.loads(json_data)
+        data_dict["email"] = request.COOKIES.get("email")
+        data_dict["sessionId"] = request.COOKIES.get("sessionId")
+
         salt = request.COOKIES.get("salt")
         password = request.COOKIES.get("password")
 
-        url = f'{base_url}/vault-new/'
+        url = f'{base_url}/vault-import/'
         
         for entry in data_dict["items"]:
-          entry["email"] = email
-          entry["sessionId"] = sessionId
           entry["password"] = encryptor.encrypt(salt, entry["password"], password)
           entry["note"] = encryptor.encrypt(salt, entry["note"], password)
 
-          success, dict_response = sendRequestPost(url, entry)
-          if success:
-            pass
-          elif success == None:
-            response = redirect("vault", permanent=True)
-            messages.error(request, "Connection Error")
-            return response
-          else:
-            response = redirect("vault", permanent=True)
-            messages.error(request, dict_response["errorMessage"])
-            return response
-          
-        response = redirect("vault", permanent=True)
-        messages.success(request, "Vault Imported")
-        return response
+        success, dict_response = sendRequestPost(url, data_dict)
+        if success:
+          response = redirect("vault", permanent=True)
+          messages.success(request, "Vault Imported")
+          return response
+        elif success == None:
+          response = redirect("vault", permanent=True)
+          messages.error(request, "Connection Error")
+          return response
+        else:
+          response = redirect("vault", permanent=True)
+          messages.error(request, dict_response["errorMessage"])
+          return response
       except Exception as e:
         response = redirect("vault", permanent=True)
         messages.error(request, "Invalid JSON file")
