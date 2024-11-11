@@ -21,6 +21,7 @@ def home(request):
 
 
 def sendRequestPost(url, data):
+  data["apiToken"] = ConfigObj.api_token
   attempt_num = 0
   while attempt_num < ConfigObj.max_retries:
     try:

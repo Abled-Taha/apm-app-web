@@ -24,3 +24,4 @@ class Config(object):
     self.client_port = int(os.getenv("client_port"))
     self.allowed_hosts = os.getenv("allowed_hosts").split(",")
     self.max_retries = int(os.getenv("max_retries"))
+    self.api_token = os.getenv("api_token")
