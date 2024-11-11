@@ -70,6 +70,11 @@ def signin(request):
         response.set_cookie("password", data["password"], max_age=60*60*24*365)
         response.set_cookie("salt", dict_response["salt"], max_age=60*60*24*365)
         response.set_cookie("username", dict_response["username"], max_age=60*60*24*365)
+        response.set_cookie("pGConfigLength", 16, max_age=60*60*24*365)
+        response.set_cookie("pGConfigCapitalLetters", True, max_age=60*60*24*365)
+        response.set_cookie("pGConfigSmallLetters", True, max_age=60*60*24*365)
+        response.set_cookie("pGConfigNumbers", True, max_age=60*60*24*365)
+        response.set_cookie("pGConfigSymbols", True, max_age=60*60*24*365)
 
         LogHandlerObj.write(f"Signin | OK | {data['email']} | {get_client_ip(request)}")
         return response
