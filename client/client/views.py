@@ -360,9 +360,17 @@ def logout(request):
 
     if success:
       response = redirect("signin", permanent=False)
+      response.delete_cookie("csrftoken")
       response.delete_cookie("email")
       response.delete_cookie("sessionId")
       response.delete_cookie("password")
+      response.delete_cookie("salt")
+      response.delete_cookie("username")
+      response.delete_cookie("pGConfigLength")
+      response.delete_cookie("pGConfigCapitalLetters")
+      response.delete_cookie("pGConfigSmallLetters")
+      response.delete_cookie("pGConfigNumbers")
+      response.delete_cookie("pGConfigSymbols")
 
       LogHandlerObj.write(f"Logout | OK | {request.COOKIES.get('email')} | {get_client_ip(request)}")
       return response
@@ -375,9 +383,18 @@ def logout(request):
     else:
       response = redirect("signin", permanent=True)
       response.set_cookie("errorMessage", dict_response["errorMessage"])
+      response.delete_cookie("csrftoken")
       response.delete_cookie("sessionId")
       response.delete_cookie("email")
+      response.delete_cookie("sessionId")
+      response.delete_cookie("password")
       response.delete_cookie("salt")
+      response.delete_cookie("username")
+      response.delete_cookie("pGConfigLength")
+      response.delete_cookie("pGConfigCapitalLetters")
+      response.delete_cookie("pGConfigSmallLetters")
+      response.delete_cookie("pGConfigNumbers")
+      response.delete_cookie("pGConfigSymbols")
 
       LogHandlerObj.write(f"Logout | FAILED | {request.COOKIES.get('email')} | {get_client_ip(request)} | {dict_response['errorMessage']}")
       return response
