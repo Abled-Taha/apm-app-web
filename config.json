@@ -6,5 +6,6 @@
   "client_host":"0.0.0.0",
   "client_port":"8080",
   "allowed_hosts":["*"],
-  "max_retries":3
+  "max_retries":3,
+  "apiToken":""
 }
