@@ -9,7 +9,7 @@
 3. Make ".env" file
 4. Set all the variables in that file from the "config.json" file
 5. Open a terminal in "./apm-app-web"
-6. Run ```pip install -r ./requirements.txt ; cd ./client ; python manage.py collectstatic ; cd .. ; python main.py```
+6. Run ```pip install -r ./requirements.txt ; cd ./client ; python manage.py collectstatic ; cd .. ; python main.py run-client```
 7. Visit http://127.0.0.1:8080 and see it running
 
 ### Todo
