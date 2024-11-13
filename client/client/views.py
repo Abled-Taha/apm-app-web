@@ -173,8 +173,8 @@ def vault(request):
         password = request.COOKIES.get("password")
 
         def handle_item(item):
-          item["note"] = encryptor.decryptor(salt, password, item["note"])
-          item["password"] = encryptor.decryptor(salt, password, item["password"])
+          item["note"] = encryptor.decrypt(salt, password, item["note"])
+          item["password"] = encryptor.decrypt(salt, password, item["password"])
 
         threads = []
         for value in dict_response["passwords"]:
@@ -507,7 +507,7 @@ def ppNew(request):
     else:
       print(form.errors)
       response = redirect("vault", permanent=True)
-      messages.error(request, form.errors["image"][0])
+      messages.error(request, str(form.errors["image"][0]))
       return response
   else:
     return HttpResponse("method not allowed")
@@ -527,9 +527,9 @@ def exportApmJson0(request):
 
     if success:
       for value in dict_response["passwords"]:
-        noteDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["note"])
+        noteDecrypt = encryptor.decrypt(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["note"])
         value["note"] = noteDecrypt
-        passwordDecrypt = encryptor.decryptor(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["password"])
+        passwordDecrypt = encryptor.decrypt(request.COOKIES.get("salt"), request.COOKIES.get("password"), value["password"])
         value["password"] = passwordDecrypt
 
       export = {
@@ -635,7 +635,7 @@ def importVault(request):
     else:
       print(form.errors)
       response = redirect("vault", permanent=True)
-      messages.error(request, form.errors["file"][0])
+      messages.error(request, str(form.errors["file"][0]))
       return response
   else:
     return HttpResponse("method not allowed")

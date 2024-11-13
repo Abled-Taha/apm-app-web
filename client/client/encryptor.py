@@ -18,7 +18,7 @@ def encrypt(salt, password, masterPassword):
 
   return str(passwordEncrypt)
 
-def decryptor(salt, masterPassword, passwordEncrypt):
+def decrypt(salt, masterPassword, passwordEncrypt):
   kdf = PBKDF2HMAC(
       algorithm=hashes.SHA256(),
       length=32,
