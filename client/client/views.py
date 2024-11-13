@@ -1,13 +1,13 @@
-import threading, json, time, requests, base64, datetime
+import threading, json, base64, datetime
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
 from .settings import ConfigObj, LogHandlerObj
 from . import forms, encryptor
+from .Functions import Functions
 
 base_url = f"http://{ConfigObj.server_host}:{ConfigObj.server_port}"
-
-
+functions = Functions(ConfigObj)
 
 def home(request):
   if request.method != "GET":
@@ -20,42 +20,12 @@ def home(request):
 
 
 
-def sendRequestPost(url, data):
-  data["apiToken"] = ConfigObj.api_token
-  attempt_num = 0
-  while attempt_num < ConfigObj.max_retries:
-    try:
-      response = requests.post(url, json=data)
-      dict_response = response.json()
-
-      if dict_response["errorCode"] == 0:
-        return True, dict_response
-          
-      else:
-        return False, dict_response
-    except:
-      attempt_num += 1
-      time.sleep(2)
-  return None, {}
-
-
-
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
-
-
-
 def signin(request):
   if request.method == "POST":
     form = forms.Signin(request.POST)
     if form.is_valid():
       if form.cleaned_data["sessionName"] == "":
-        form.cleaned_data["sessionName"] = get_client_ip(request)
+        form.cleaned_data["sessionName"] = functions.get_client_ip(request)
       data = {
         "email":form.cleaned_data["email"],
         "password":form.cleaned_data["password"],
@@ -63,33 +33,66 @@ def signin(request):
       }
       url = f'{base_url}/signin/'
 
-      success, dict_response = sendRequestPost(url, data)
+      success, dict_response = functions.sendRequestPost(url, data)
       if success:
         response = redirect("home", permanent=True)
-        response.set_cookie("sessionId", dict_response["sessionId"], max_age=60*60*24*365)
-        response.set_cookie("email", data["email"], max_age=60*60*24*365)
-        response.set_cookie("password", data["password"], max_age=60*60*24*365)
-        response.set_cookie("salt", dict_response["salt"], max_age=60*60*24*365)
-        response.set_cookie("username", dict_response["username"], max_age=60*60*24*365)
-        response.set_cookie("pGConfigLength", 16, max_age=60*60*24*365)
-        response.set_cookie("pGConfigCapitalLetters", True, max_age=60*60*24*365)
-        response.set_cookie("pGConfigSmallLetters", True, max_age=60*60*24*365)
-        response.set_cookie("pGConfigNumbers", True, max_age=60*60*24*365)
-        response.set_cookie("pGConfigSymbols", True, max_age=60*60*24*365)
+        cookies = [
+          {
+            "name": "email",
+            "value": data["email"],
+          },
+          {
+            "name": "sessionId",
+            "value": dict_response["sessionId"],
+          },
+          {
+            "name": "password",
+            "value": data["password"],
+          },
+          {
+            "name": "salt",
+            "value": dict_response["salt"],
+          },
+          {
+            "name": "username",
+            "value": dict_response["username"],
+          },
+          {
+            "name": "pGConfigLength",
+            "value": 16,
+          },
+          {
+            "name": "pGConfigCapitalLetters",
+            "value": True,
+          },
+          {
+            "name": "pGConfigSmallLetters",
+            "value": True,
+          },
+          {
+            "name": "pGConfigNumbers",
+            "value": True,
+          },
+          {
+            "name": "pGConfigSymbols",
+            "value": True,
+          }
+        ]
+        response = functions.set_cookie(cookies, response)
 
-        LogHandlerObj.write(f"Signin | OK | {data['email']} | {get_client_ip(request)}")
+        LogHandlerObj.write(f"Signin | OK | {data['email']} | {functions.get_client_ip(request)}")
         return response
       elif success == None:
         response = redirect("signin", permanent=True)
         messages.error(request, "Connection Error")
 
-        LogHandlerObj.write(f"Signin | FAILED | {data['email']} | {get_client_ip(request)} | Connection Error")
+        LogHandlerObj.write(f"Signin | FAILED | {data['email']} | {functions.get_client_ip(request)} | Connection Error")
         return response
       else:
         response = redirect("signin", permanent=True)
         messages.error(request, dict_response["errorMessage"])
         
-        LogHandlerObj.write(f"Signin | FAILED | {data['email']} | {get_client_ip(request)} | {dict_response['errorMessage']}")
+        LogHandlerObj.write(f"Signin | FAILED | {data['email']} | {functions.get_client_ip(request)} | {dict_response['errorMessage']}")
         return response
     else:
       response = redirect("signin", permanent=True)
@@ -117,24 +120,25 @@ def signup(request):
       }
       url = f'{base_url}/signup/'
 
-      success, dict_response = sendRequestPost(url, data)
+      success, dict_response = functions.sendRequestPost(url, data)
       if success:
-        response = redirect("signin", permanent=True)
+        # response = redirect("signin", permanent=True)
         messages.success(request, "Account Created")
 
-        LogHandlerObj.write(f"Signup | OK | {data['email']} | {get_client_ip(request)}")
-        return response
+        LogHandlerObj.write(f"Signup | OK | {data['email']} | {functions.get_client_ip(request)}")
+        # return response
+        return(signin(request))
       elif success == None:
         response = redirect("signup", permanent=True)
         messages.error(request, "Connection Error")
 
-        LogHandlerObj.write(f"Signup | FAILED | {data['email']} | {get_client_ip(request)} | Connection Error")
+        LogHandlerObj.write(f"Signup | FAILED | {data['email']} | {functions.get_client_ip(request)} | Connection Error")
         return response
       else:
         response = redirect("signup", permanent=True)
         messages.error(request, dict_response["errorMessage"])
 
-        LogHandlerObj.write(f"Signup | FAILED | {data['email']} | {get_client_ip(request)} | {dict_response['errorMessage']}")
+        LogHandlerObj.write(f"Signup | FAILED | {data['email']} | {functions.get_client_ip(request)} | {dict_response['errorMessage']}")
         return response
     else:
       response = redirect("signup", permanent=True)
@@ -162,7 +166,7 @@ def vault(request):
         "email":request.COOKIES.get("email"),
         "sessionId":request.COOKIES.get("sessionId")
       }
-      success, dict_response = sendRequestPost(url, data)
+      success, dict_response = functions.sendRequestPost(url, data)
 
       if success:
         salt = request.COOKIES.get("salt")
@@ -182,12 +186,12 @@ def vault(request):
           t.join()
 
         url = f'{base_url}/session-get/'
-        success, dict_response1 = sendRequestPost(url, data)
+        success, dict_response1 = functions.sendRequestPost(url, data)
         if success:
           sessions = dict_response1["sessionIds"]
           url = f'{base_url}/pp-get/'
           data["username"] = request.COOKIES.get("username")
-          success, dict_response2 = sendRequestPost(url, data)
+          success, dict_response2 = functions.sendRequestPost(url, data)
           if success:
             pp = dict_response2["pp"].removeprefix("b'").removesuffix("'")
           else:
@@ -202,10 +206,13 @@ def vault(request):
       else:
         response = redirect("signin", permanent=True)
         messages.error(request, dict_response["errorMessage"])
-        response.delete_cookie("sessionId")
-        response.delete_cookie("email")
-        response.delete_cookie("password")
-        response.delete_cookie("salt")
+        cookies = [
+          "email",
+          "password",
+          "salt",
+          "sessionId"
+        ]
+        response = functions.delete_cookie(cookies, response)
         return response
       
 
@@ -238,7 +245,7 @@ def vaultNew(request):
         "note":noteEncrypt
       }
       url = f'{base_url}/vault-new/'
-      success, dict_response = sendRequestPost(url, data)
+      success, dict_response = functions.sendRequestPost(url, data)
 
       if success:
         response = redirect("vault", permanent=True)
@@ -294,7 +301,7 @@ def vaultEdit(request):
       }
       url = f'{base_url}/vault-edit/'
 
-      success, dict_response = sendRequestPost(url, data)
+      success, dict_response = functions.sendRequestPost(url, data)
       if success:
         response = redirect("vault", permanent=True)
         messages.success(request, "Password Saved")
@@ -331,7 +338,7 @@ def vaultDelete(request):
 
       url = f'{base_url}/vault-delete/'
 
-      success, dict_response = sendRequestPost(url, data)
+      success, dict_response = functions.sendRequestPost(url, data)
       if success:
         response = redirect("vault")
         return response
@@ -362,47 +369,41 @@ def logout(request):
       "sessionId":request.COOKIES.get("sessionId"),
       "sessionIdW":request.COOKIES.get("sessionId")
     }
-    success, dict_response = sendRequestPost(url, data)
+    success, dict_response = functions.sendRequestPost(url, data)
+
+    cookies = [
+        "csrftoken",
+        "email",
+        "sessionId",
+        "password",
+        "salt",
+        "username",
+        "pGConfigLength",
+        "pGConfigCapitalLetters",
+        "pGConfigSmallLetters",
+        "pGConfigNumbers",
+        "pGConfigSymbols"
+      ]
 
     if success:
       response = redirect("signin", permanent=False)
-      response.delete_cookie("csrftoken")
-      response.delete_cookie("email")
-      response.delete_cookie("sessionId")
-      response.delete_cookie("password")
-      response.delete_cookie("salt")
-      response.delete_cookie("username")
-      response.delete_cookie("pGConfigLength")
-      response.delete_cookie("pGConfigCapitalLetters")
-      response.delete_cookie("pGConfigSmallLetters")
-      response.delete_cookie("pGConfigNumbers")
-      response.delete_cookie("pGConfigSymbols")
+      response = functions.delete_cookie(cookies, response)
 
-      LogHandlerObj.write(f"Logout | OK | {request.COOKIES.get('email')} | {get_client_ip(request)}")
+      LogHandlerObj.write(f"Logout | OK | {request.COOKIES.get('email')} | {functions.get_client_ip(request)}")
       return response
     elif success == None:
       response = redirect("vault", permanent=True)
-      response.set_cookie("errorMessage", "Connection Error")
+      messages.error(request, "Connection Error")
 
-      LogHandlerObj.write(f"Logout | FAILED | {request.COOKIES.get('email')} | {get_client_ip(request)} | Connection Error")
+      LogHandlerObj.write(f"Logout | FAILED | {request.COOKIES.get('email')} | {functions.get_client_ip(request)} | Connection Error")
       return response
     else:
       response = redirect("signin", permanent=True)
-      response.set_cookie("errorMessage", dict_response["errorMessage"])
-      response.delete_cookie("csrftoken")
-      response.delete_cookie("sessionId")
-      response.delete_cookie("email")
-      response.delete_cookie("sessionId")
-      response.delete_cookie("password")
-      response.delete_cookie("salt")
-      response.delete_cookie("username")
-      response.delete_cookie("pGConfigLength")
-      response.delete_cookie("pGConfigCapitalLetters")
-      response.delete_cookie("pGConfigSmallLetters")
-      response.delete_cookie("pGConfigNumbers")
-      response.delete_cookie("pGConfigSymbols")
+      messages.error(request, dict_response["errorMessage"])
 
-      LogHandlerObj.write(f"Logout | FAILED | {request.COOKIES.get('email')} | {get_client_ip(request)} | {dict_response['errorMessage']}")
+      response = functions.delete_cookie(cookies, response)
+
+      LogHandlerObj.write(f"Logout | FAILED | {request.COOKIES.get('email')} | {functions.get_client_ip(request)} | {dict_response['errorMessage']}")
       return response
 
 
@@ -419,7 +420,7 @@ def sessionEdit(request):
       }
       url = f'{base_url}/session-edit/'
 
-      success, dict_response = sendRequestPost(url, data)
+      success, dict_response = functions.sendRequestPost(url, data)
       if success:
         response = redirect("vault", permanent=True)
         messages.success(request, "Session Saved")
@@ -454,7 +455,7 @@ def sessionDelete(request):
 
       url = f'{base_url}/session-delete/'
 
-      success, dict_response = sendRequestPost(url, data)
+      success, dict_response = functions.sendRequestPost(url, data)
       if success:
         response = redirect("vault")
         return response
@@ -490,7 +491,7 @@ def ppNew(request):
       image64 = f"{image64}"
       data["image"] = image64
 
-      success, dict_response = sendRequestPost(url, data)
+      success, dict_response = functions.sendRequestPost(url, data)
       if success:
         response = redirect("vault", permanent=True)
         messages.success(request, "Profile Picture Updated")
@@ -522,7 +523,7 @@ def exportApmJson0(request):
       "email":request.COOKIES.get("email"),
       "sessionId":request.COOKIES.get("sessionId")
     }
-    success, dict_response = sendRequestPost(url, data)
+    success, dict_response = functions.sendRequestPost(url, data)
 
     if success:
       for value in dict_response["passwords"]:
@@ -558,11 +559,30 @@ def pGConfig(request):
     form = forms.PGConfig(request.POST)
     if form.is_valid():
       response = redirect("vault", permanent=True)
-      response.set_cookie("pGConfigLength", form.cleaned_data["length"], max_age=365*24*60*60)
-      response.set_cookie("pGConfigCapitalLetters", form.cleaned_data["capitalLetters"], max_age=365*24*60*60)
-      response.set_cookie("pGConfigSmallLetters", form.cleaned_data["smallLetters"], max_age=365*24*60*60)
-      response.set_cookie("pGConfigNumbers", form.cleaned_data["numbers"], max_age=365*24*60*60)
-      response.set_cookie("pGConfigSymbols", form.cleaned_data["symbols"], max_age=365*24*60*60)
+      cookies = [
+        {
+          "name": "pGConfigLength",
+          "value": form.cleaned_data["length"],
+        },
+        {
+          "name": "pGConfigCapitalLetters",
+          "value": form.cleaned_data["capitalLetters"],
+        },
+        {
+          "name": "pGConfigSmallLetters",
+          "value": form.cleaned_data["smallLetters"],
+        },
+        {
+          "name": "pGConfigNumbers",
+          "value": form.cleaned_data["numbers"],
+        },
+        {
+          "name": "pGConfigSymbols",
+          "value": form.cleaned_data["symbols"],
+        }
+      ]
+      response = functions.set_cookie(cookies, response)
+
       messages.success(request, "Password Generation Config Saved")
       return response
     else:
@@ -595,7 +615,7 @@ def importVault(request):
           entry["password"] = encryptor.encrypt(salt, entry["password"], password)
           entry["note"] = encryptor.encrypt(salt, entry["note"], password)
 
-        success, dict_response = sendRequestPost(url, data_dict)
+        success, dict_response = functions.sendRequestPost(url, data_dict)
         if success:
           response = redirect("vault", permanent=True)
           messages.success(request, "Vault Imported")
