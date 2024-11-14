@@ -9,6 +9,13 @@
         <li><button class="popup-settings-buttons" onclick=openPopupVaultSettings()>Vault Settings > </button></li>
         <br>
         <li><button class="popup-settings-buttons" onclick=openPopupPGConfig()>Password Generator Config > </button></li>
+        {% if verified == False %}
+          <br>
+          <div class="alert alert-danger fade show" role="alert">
+            Note: Verify you email so in the case of emergency, the account can be recovered.
+            <button class="popup-settings-buttons-red" onclick="simulateAnchorClick(/otp/)">Verify Email</button>
+          </div>
+        {% endif %}
       </div>
       <br>
       <button onclick=simulateAnchorClick("/logout")>Logout</button>

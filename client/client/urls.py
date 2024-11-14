@@ -16,4 +16,5 @@ urlpatterns = [
     path("import-vault/", views.importVault, name="importVault"),
     path("pgconfig/", views.pGConfig, name="pGConfig"),
     path("logout/", views.logout, name="logout"),
+    path("otp/", views.otp, name="otp"),
 ]

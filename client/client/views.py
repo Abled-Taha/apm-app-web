@@ -198,7 +198,18 @@ def vault(request):
             pp = ""
         else:
           sessions = []
-        return render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'formImageUpdate':forms.ImageUpdate(), 'formPGConfig':forms.PGConfig(), 'formImportVault':forms.ImportVault(), 'sessions':sessions, 'pp':pp})
+        
+        cookies = [
+          {
+            "name": "verified",
+            "value": dict_response["verified"]
+          }
+        ]
+
+        response = render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'formImageUpdate':forms.ImageUpdate(), 'formPGConfig':forms.PGConfig(), 'formImportVault':forms.ImportVault(), 'sessions':sessions, 'pp':pp, 'verified':dict_response["verified"]})
+        response = functions.set_cookie(cookies, response)
+
+        return response
       elif success == None:
         response = redirect("vault", permanent=True)
         messages.error(request, "Connection Error")
@@ -639,3 +650,56 @@ def importVault(request):
       return response
   else:
     return HttpResponse("method not allowed")
+  
+
+
+def otp(request):
+  if request.method == "POST":
+    form = forms.Otp(request.POST)
+    if form.is_valid():
+      email = request.COOKIES.get("email")
+      sessionId = request.COOKIES.get("sessionId")
+      otp = str(form.cleaned_data["otp1"]) + str(form.cleaned_data["otp2"]) + str(form.cleaned_data["otp3"]) + str(form.cleaned_data["otp4"]) + str(form.cleaned_data["otp5"]) + str(form.cleaned_data["otp6"])
+      data = {"email":email, "sessionId":sessionId, "otp":otp}
+      url = f'{base_url}/otp-verify/'
+      success, dict_response = functions.sendRequestPost(url, data)
+      if success:
+        response = redirect("vault", permanent=True)
+        messages.success(request, "Email Verified")
+        return response
+      elif success == None:
+        response = redirect("vault", permanent=True)
+        messages.error(request, "Connection Error")
+        return response
+      else:
+        response = redirect("vault", permanent=True)
+        messages.error(request, dict_response["errorMessage"])
+        return response
+    else:
+      messages.error(request, "Invalid Form")
+      return render(request, "otp/index.html", {"title":"APM - OTP", 'form':form})
+  else:
+    if request.COOKIES.get("verified") == "False":
+      email = request.COOKIES.get("email")
+      sessionId = request.COOKIES.get("sessionId")
+      data = {"email":email, "sessionId":sessionId}
+      url = f'{base_url}/otp-send/'
+
+      success, dict_response = functions.sendRequestPost(url, data)
+      if success:
+        form = forms.Otp()
+        response = render(request, "otp/index.html", {"title":"APM - OTP", 'form':form})
+        messages.success(request, "OTP Sent")
+        return response
+      elif success == None:
+        response = redirect("vault", permanent=True)
+        messages.error(request, "Connection Error")
+        return response
+      else:
+        response = redirect("vault", permanent=True)
+        messages.error(request, dict_response["errorMessage"])
+        return response
+    else:
+      response = redirect("vault")
+      messages.info(request, "Email Already Verified")
+      return response

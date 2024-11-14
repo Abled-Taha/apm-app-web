@@ -1,0 +1,114 @@
+html, body {
+  height: 100%; /* Full height */
+  width: 100%; /* Full width */
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2); /* Full-screen gradient */
+  color: #333;
+  display: flex;
+  align-items: center; /* Centers content vertically */
+  justify-content: center; /* Centers content horizontally */
+}
+
+.container {
+  max-width: 400px;
+  width: 100%; /* Ensures the container fills its width without exceeding max-width */
+  margin: 20px; /* Space around the container */
+  padding: 30px 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.otp-input input {
+  width: 2.5em; /* Full width within the input group */
+  max-width: 300px; /* Limits the width for better appearance */
+  padding: 10px 15px;
+  margin-bottom: 0.5em;
+  font-size: 18px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  transition: border-color 0.3s;
+}
+
+.otp-input input:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+.otp-container h2 {
+  color: #667eea;
+  margin-bottom: 10px;
+}
+
+.otp-container p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+button {
+  width: 100%;
+  background-color: #667eea;
+  color: #fff;
+  padding: 12px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #764ba2;
+}
+
+.extra-options {
+  margin-top: 15px;
+}
+
+.extra-options a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.extra-options a:hover {
+  text-decoration: underline;
+}
+
+.note {
+  color: #777;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.otp-box {
+  width: 40px;
+  margin: 0 5px;
+  text-align: center;
+  font-size: 20px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  transition: border-color 0.3s;
+}
+
+.otp-box:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+.input-group {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Ensures vertical centering */
+}
+
+.input-group span {
+  font-size: 20px;
+  color: #333;
+  margin: 0 5px; /* Adds horizontal spacing */
+  display: flex;
+  align-items: center; /* Centers the hyphen vertically */
+}

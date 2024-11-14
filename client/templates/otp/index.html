@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block head %}
+<title>{{title}}</title>
+<link rel="stylesheet" href="{% static "css/otp/index.css" %}">
+<script src="{% static "js/otp/index.js" %}"></script>
+{% endblock head %}
+
+{% block body %}
+<div class="container otp-container">
+  <h2>OTP Verification</h2>
+  <p>Enter the 6-digit code sent to your email</p>
+  <form id="otp-form" action="/otp/" method="POST">
+    {% csrf_token %}
+      <div class="input-group otp-input">
+          <!-- Six individual input boxes for the OTP -->
+          {{form.otp1}}
+          <span>-</span>
+          {{form.otp2}}
+          <span>-</span>
+          {{form.otp3}}
+          <span>-</span>
+          {{form.otp4}}
+          <span>-</span>
+          {{form.otp5}}
+          <span>-</span>
+          {{form.otp6}}
+      </div>
+      <button type="submit">Verify</button>
+  </form>
+  <div class="extra-options">
+      <p>Didn't receive the code? <a href="/resend-otp">Resend OTP</a></p>
+      <p class="note">Note: Please check your spam or junk folder if you do not see the email in your inbox.</p>
+  </div>
+</div>
+{% endblock body %}
