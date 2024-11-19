@@ -2,12 +2,10 @@ import threading, json, base64, datetime
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
-from .settings import ConfigObj, LogHandlerObj
+from .settings import ConfigObj, LogHandlerObj, functions
 from . import forms, encryptor
-from .Functions import Functions
 
 base_url = f"http://{ConfigObj.server_host}:{ConfigObj.server_port}"
-functions = Functions(ConfigObj)
 
 def home(request):
   if request.method != "GET":

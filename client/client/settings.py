@@ -27,6 +27,11 @@ from LogHandler import LogHandler as LogHandlerClass
 global LogHandlerObj
 LogHandlerObj = LogHandlerClass(BASE_DIR)
 
+# Setting up Functions
+from Functions import Functions as FunctionsClass
+global functions
+functions = FunctionsClass(ConfigObj)
+
 # Changing the server port
 runserver.default_port = ConfigObj.client_port
 runserver.default_addr = str(ConfigObj.client_host)
