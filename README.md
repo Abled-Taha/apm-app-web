@@ -14,15 +14,14 @@
 
 ### Todo
 1. Support BitWarden Imports
-2. Master Password Changing
-3. Forgot Password
-4. Extension
-5. Mobile App
-6. 2FA
-7.  Auto Fill
-8.  Password Strength Analysis
-9.  Emergency Contact Access
-10. Password History
-11. Biometric Access
-12. Offline Access
-13. Logs
+2. Forgot Password
+3. Extension
+4. Mobile App
+5. 2FA
+6.  Auto Fill
+7.  Password Strength Analysis
+8.  Emergency Contact Access
+9.  Password History
+10. Biometric Access
+11. Offline Access
+12. Logs
