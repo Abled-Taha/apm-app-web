@@ -79,3 +79,7 @@ class Otp(forms.Form):
     otp4 = forms.IntegerField(label="", min_value=0, max_value=9, widget=forms.NumberInput({"type":"text", "class":"otp-box", "id":"otp4"}))
     otp5 = forms.IntegerField(label="", min_value=0, max_value=9, widget=forms.NumberInput({"type":"text", "class":"otp-box", "id":"otp5"}))
     otp6 = forms.IntegerField(label="", min_value=0, max_value=9, widget=forms.NumberInput({"type":"text", "class":"otp-box", "id":"otp6"}))
+
+class ChangePassword(forms.Form):
+    oldPassword = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Enter your old password"}))
+    newPassword = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Enter your new password"}))

@@ -170,18 +170,9 @@ def vault(request):
         salt = request.COOKIES.get("salt")
         password = request.COOKIES.get("password")
 
-        def handle_item(item):
-          item["note"] = encryptor.decrypt(salt, password, item["note"])
-          item["password"] = encryptor.decrypt(salt, password, item["password"])
-
-        threads = []
         for value in dict_response["passwords"]:
-          t = threading.Thread(target=handle_item, args=(value,))
-          t.start()
-          threads.append(t)
-
-        for t in threads:
-          t.join()
+          value["note"] = encryptor.decrypt(salt, password, value["note"])
+          value["password"] = encryptor.decrypt(salt, password, value["password"])
 
         url = f'{base_url}/session-get/'
         success, dict_response1 = functions.sendRequestPost(url, data)
@@ -204,7 +195,7 @@ def vault(request):
           }
         ]
 
-        response = render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'formImageUpdate':forms.ImageUpdate(), 'formPGConfig':forms.PGConfig(), 'formImportVault':forms.ImportVault(), 'sessions':sessions, 'pp':pp, 'verified':dict_response["verified"]})
+        response = render(request, "vault/index.html", {'title':'APM - Vault', 'passwords':dict_response["passwords"], 'formVaultDelete':forms.VaultDelete(), 'formVaultNew':forms.VaultNew(), 'formVaultEdit':forms.VaultEdit(), 'formSessionEdit':forms.SessionEdit(), 'formSessionDelete':forms.SessionDelete(), 'formImageUpdate':forms.ImageUpdate(), 'formPGConfig':forms.PGConfig(), 'formImportVault':forms.ImportVault(), 'formChangePassword':forms.ChangePassword(),'sessions':sessions, 'pp':pp, 'verified':dict_response["verified"]})
         response = functions.set_cookie(cookies, response)
 
         return response
@@ -701,3 +692,76 @@ def otp(request):
       response = redirect("vault")
       messages.info(request, "Email Already Verified")
       return response
+
+
+
+def changePassword(request):
+  if request.method == "POST":
+    form = forms.ChangePassword(request.POST)
+    if form.is_valid():
+      email = request.COOKIES.get("email")
+      sessionId = request.COOKIES.get("sessionId")
+      salt = request.COOKIES.get("salt")
+      oldPassword = form.cleaned_data["oldPassword"]
+      newPassword = form.cleaned_data["newPassword"]
+      passwords = []
+      data = {}
+
+      data["email"] = email
+      data["sessionId"] = sessionId
+
+      url = f'{base_url}/vault-get/'
+      success, dict_response = functions.sendRequestPost(url, data)
+      print(f"Old Encrypted Password: {dict_response['passwords'][0]['password']}")
+
+      if success:
+        for value in dict_response["passwords"]:
+          value["note"] = encryptor.decrypt(salt, oldPassword, value["note"])
+          value["password"] = encryptor.decrypt(salt, oldPassword, value["password"])
+          print(f"Unencrypted Password: {value['password']}")
+
+          value["note"] = encryptor.encrypt(salt, value["note"], newPassword)
+          value["password"] = encryptor.encrypt(salt, value["password"], newPassword)
+          print(f"New Encrypted Password: {value['password']}")
+
+        passwords = dict_response["passwords"]
+        data["oldPassword"] = oldPassword
+        data["newPassword"] = newPassword
+        data["passwords"] = passwords
+        url = f'{base_url}/change-password/'
+        success, dict_response = functions.sendRequestPost(url, data)
+
+        if success:
+          response = redirect("vault", permanent=True)
+          cookies = [
+            {
+              "name":"password",
+              "value":newPassword
+            }
+          ]
+          response = functions.set_cookie(cookies, response)
+          messages.success(request, "Password Changed")
+          return response
+        elif success == None:
+          response = redirect("vault", permanent=True)
+          messages.error(request, "Connection Error")
+          return response
+        else:
+          response = redirect("vault", permanent=True)
+          messages.error(request, dict_response["errorMessage"])
+          return response
+        
+      elif success == None:
+          response = redirect("vault", permanent=True)
+          messages.error(request, "Connection Error")
+          return response
+      else:
+        response = redirect("vault", permanent=True)
+        messages.error(request, dict_response["errorMessage"])
+        return response
+    else:
+      messages.error(request, "Invalid Form")
+      return redirect("vault")
+  else:
+    form = forms.ChangePassword()
+    return redirect("vault")

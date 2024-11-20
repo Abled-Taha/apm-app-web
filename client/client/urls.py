@@ -17,4 +17,5 @@ urlpatterns = [
     path("pgconfig/", views.pGConfig, name="pGConfig"),
     path("logout/", views.logout, name="logout"),
     path("otp/", views.otp, name="otp"),
+    path("change-password/", views.changePassword, name="changePassword"),
 ]

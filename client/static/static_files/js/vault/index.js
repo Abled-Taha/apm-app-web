@@ -60,6 +60,17 @@ function closePopupAddPassword() {
   document.removeEventListener('keydown', handleKeyDown);
 }
 
+function openPopupChangeMasterPassword() {
+  closePopupUserSettings()
+  document.getElementById("popup-changeMasterPassword").style.display = "flex";
+  document.addEventListener('keydown', handleKeyDown);
+}
+
+function closePopupChangeMasterPassword() {
+  document.getElementById("popup-changeMasterPassword").style.display = "none";
+  document.removeEventListener('keydown', handleKeyDown);
+}
+
 function openPopupSettings() {
   document.getElementById("popup-settings").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
@@ -203,6 +214,7 @@ function handleKeyDown(event) {
     closePopup();
     closePopupAdd();
     closePopupAddPassword();
+    closePopupChangeMasterPassword();
     closePopupDelete();
     closePopupEdit();
     closePopupExport();
@@ -223,6 +235,7 @@ function handleKeyDownMain(event) {
     document.activeElement.id === 'id_username' || 
     document.activeElement.id === 'id_newUsername' || 
     document.activeElement.id === 'id_password' || 
+    document.activeElement.id === 'id_oldPassword' || 
     document.activeElement.id === 'id_newPassword' ||  
     document.activeElement.id === 'id_url' || 
     document.activeElement.id === 'id_newUrl' || 
@@ -233,6 +246,7 @@ function handleKeyDownMain(event) {
     document.getElementById("popup-details").style.display === "flex" ||
     document.getElementById("popup-add").style.display === "flex" ||
     document.getElementById("popup-addPassword").style.display === "flex" ||
+    document.getElementById("popup-changeMasterPassword").style.display === "flex" ||
     document.getElementById("popup-delete").style.display === "flex" ||
     document.getElementById("popup-edit").style.display === "flex" ||
     document.getElementById("popup-export").style.display === "flex" ||
@@ -282,16 +296,19 @@ function filterVault() {
 
 function togglePasswordVisibility() {
   const passwordField = document.getElementById("id_password");
+  const id_oldPasswordField = document.getElementById("id_oldPassword");
   const newPasswordField = document.getElementById("id_newPassword");
   const toggleIconPassword = document.getElementById("togglePassword");
 
   if (passwordField.type === "password") {
       passwordField.type = "text";
+      id_oldPasswordField.type = "text";
       newPasswordField.type = "text";
       toggleIconPassword.classList.remove("fa-eye");
       toggleIconPassword.classList.add("fa-eye-slash");
   } else {
       passwordField.type = "password";
+      id_oldPasswordField.type = "password";
       newPasswordField.type = "password";
       toggleIconPassword.classList.remove("fa-eye-slash");
       toggleIconPassword.classList.add("fa-eye");
