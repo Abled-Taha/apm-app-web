@@ -177,11 +177,11 @@ header {
 }
 
 #popup-edit-id-label {
-  visibility: hidden;
+  display: None;
 }
 
 #id_popup-edit-id {
-  visibility: hidden;
+  display: None;
 }
 
 #id_id {
@@ -257,7 +257,7 @@ p {
 label {
   display: block;
   margin-bottom: 5px;
-  color: white;
+  color: auto;
 }
 
 input {
@@ -468,4 +468,35 @@ button:hover {
 
 .pGConfig .checkboxes span input {
   width: auto;
+}
+
+.strength-bar {
+  width: 278px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+}
+
+.strength-bar-inner {
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+.zero {
+  background-color: #ff3300;
+}
+
+.low {
+  background-color: #FF9800;
+}
+
+.medium {
+  background-color: #03A9F4;
+}
+
+.high {
+  background-color: #8BC34A;
 }

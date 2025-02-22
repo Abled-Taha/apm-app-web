@@ -25,9 +25,8 @@ None of these repositores or single projects can and should be used just on thei
 4. Mobile App
 5. 2FA
 6.  Auto Fill
-7.  Password Strength Analysis
-8.  Emergency Contact Access
-9.  Password History
-10. Biometric Access
-11. Offline Access
-12. Logs
+7.  Emergency Contact Access
+8.  Password History
+9.  Biometric Access
+10. Offline Access
+11. Logs

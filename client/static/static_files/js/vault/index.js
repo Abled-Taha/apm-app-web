@@ -53,6 +53,9 @@ function openPopupAddPassword() {
   closePopupAdd()
   document.getElementById("popup-addPassword").style.display = "flex";
   document.addEventListener('keydown', handleKeyDown);
+  document.getElementById("id_password").addEventListener("input", function() {
+    updateStrengthBar(calculateStrengthBarRank(passwordStrength(document.getElementById("id_password").value)));
+  })
 }
 
 function closePopupAddPassword() {
@@ -376,6 +379,102 @@ function generatePassword() {
 
   document.getElementById("id_password").value = result;
   document.getElementById("id_newPassword").value = result;
+}
+
+function passwordStrength(password) {
+  let score = 2;
+
+  // Check for length
+  if (password.length >= 8) {
+    score += 1;
+  }
+
+  if (password.length >= 16) {
+    score += 1;
+  }
+
+  // Check for uppercase letters
+  if (/[A-Z]/.test(password)) {
+    score += 1;
+  }
+
+  // Check for lowercase letters
+  if (/[a-z]/.test(password)) {
+    score += 1;
+  }
+
+  // Check for numbers
+  if (/[0-9]/.test(password)) {
+    score += 1;
+  }
+
+  // Check for special characters
+  if (/[^A-Za-z0-9]/.test(password)) {
+    score += 1;
+  }
+
+  // Check for common patterns (e.g. "qwerty", "123456")
+  const commonPatterns = ["qwerty", "123456", "password", "iloveyou"];
+  if (commonPatterns.includes(password.toLowerCase())) {
+    score -= 2;
+  }
+
+  // Check for sequential characters (e.g. "abcde", "12345")
+  let sequentialChars = 0;
+  for (let i = 0; i < password.length - 2; i++) {
+    if (password.charCodeAt(i) === password.charCodeAt(i + 1) - 1 &&
+        password.charCodeAt(i + 1) === password.charCodeAt(i + 2) - 1) {
+      sequentialChars++;
+    }
+  }
+  if (sequentialChars > 2) {
+    score -= 1;
+  }
+
+  // Check if password is in common passwords list
+  // const fs = require('fs');
+  // const commonPasswordsFile = '../../../common-passwords.txt';
+  // const commonPasswords = fs.readFileSync(commonPasswordsFile, 'utf8').split('\n');
+  // if (commonPasswords.includes(password.toLowerCase())) {
+  //   score = 0;
+  // }
+
+  // Return the score
+  return score;
+}
+
+function updateStrengthBar(stage) {
+  const strengthBar = document.getElementById('strength-bar');
+  const strengthBarInner = document.getElementById('strength-bar-inner');
+
+  strengthBarInner.classList.remove('zero', 'low', 'medium', 'high');
+  strengthBarInner.classList.add(stage);
+  switch (stage) {
+    case 'low':
+      strengthBarInner.style.width = '25%';
+      break;
+    case 'medium':
+      strengthBarInner.style.width = '50%';
+      break;
+    case 'high':
+      strengthBarInner.style.width = '100%';
+      break;
+    case 'zero':
+      strengthBarInner.style.width = '100%';
+      break;
+  }
+}
+
+function calculateStrengthBarRank(score) {
+  if (score <= 2) {
+    return 'zero';
+  } else if (score <= 7) {
+    return 'low';
+  } else if (score <= 11) {
+    return 'medium';
+  } else {
+    return 'high';
+  }
 }
 
 document.addEventListener('keydown', handleKeyDownMain)
