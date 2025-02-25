@@ -712,17 +712,18 @@ def changePassword(request):
 
       url = f'{base_url}/vault-get/'
       success, dict_response = functions.sendRequestPost(url, data)
-      print(f"Old Encrypted Password: {dict_response['passwords'][0]['password']}")
 
       if success:
         for value in dict_response["passwords"]:
-          value["note"] = encryptor.decrypt(salt, oldPassword, value["note"])
-          value["password"] = encryptor.decrypt(salt, oldPassword, value["password"])
-          print(f"Unencrypted Password: {value['password']}")
+          try:
+            value["note"] = encryptor.decrypt(salt, oldPassword, value["note"])
+            value["password"] = encryptor.decrypt(salt, oldPassword, value["password"])
 
-          value["note"] = encryptor.encrypt(salt, value["note"], newPassword)
-          value["password"] = encryptor.encrypt(salt, value["password"], newPassword)
-          print(f"New Encrypted Password: {value['password']}")
+            value["note"] = encryptor.encrypt(salt, value["note"], newPassword)
+            value["password"] = encryptor.encrypt(salt, value["password"], newPassword)
+          except Exception as e:
+            print(e)
+            print("Invalid Password")
 
         passwords = dict_response["passwords"]
         data["oldPassword"] = oldPassword

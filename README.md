@@ -29,4 +29,3 @@ None of these repositores or single projects can and should be used just on thei
 8.  Password History
 9.  Biometric Access
 10. Offline Access
-11. Logs
