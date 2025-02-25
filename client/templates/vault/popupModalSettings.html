@@ -12,12 +12,12 @@
         {% if verified == False %}
           <br>
           <div class="alert alert-danger fade show" role="alert">
-            Note: Verify you email so in the case of emergency, the account can be recovered.
+            Note: For your account to be recovered in the case of emergency, your email must be verified.
             <button class="popup-settings-buttons-red" onclick="simulateAnchorClick(/otp/)">Verify Email</button>
           </div>
         {% endif %}
       </div>
       <br>
-      <button onclick=simulateAnchorClick("/logout")>Logout</button>
+      <button class="popup-settings-buttons-bg" onclick=simulateAnchorClick("/logout")>Logout</button>
   </div>
 </div>
