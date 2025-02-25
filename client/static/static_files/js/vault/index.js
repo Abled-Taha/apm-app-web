@@ -22,7 +22,15 @@ function closePopup() {
 
 function copyPassword(password) {
 navigator.clipboard.writeText(password).then(function() {
-    alert("Password copied!");
+  Toastify({
+    text: 'Password copied to clipboard!',
+    duration: 3000,
+    close: true,
+    gravity: 'top', // 'top' or 'bottom'
+    position: 'right', // 'left', 'center' or 'right'
+    backgroundColor: 'linear-gradient(135deg, #667eea, #764ba2)',
+    className: 'toastify',
+  }).showToast();
 }, function(err) {
     console.error("Could not copy password: ", err);
 });

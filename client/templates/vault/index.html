@@ -5,6 +5,9 @@
 <title>{{title}}</title>
 <link rel="stylesheet" href="{% static "css/vault/index.css" %}">
 <script src="{% static "js/vault/index.js" %}"></script>
+
+{% comment %} Toastify {% endcomment %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 {% endblock head %}
 
 {% block body %}
@@ -75,5 +78,8 @@
 {% include "vault/popupModalVaultSettings.html" %}
 
 </section>
+
+{% comment %} Toastifi {% endcomment %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 {% endblock body %}
