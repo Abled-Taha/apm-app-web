@@ -6,7 +6,7 @@
           <img src="data:image/jpg;base64, {{pp}}" alt="profile-picture"/>
         </div>
         <br>
-        <button onclick="simulateFieldClick('id_image')" class="popup-settings-buttons">Change Profile Picture</button>
+        <button onclick="simulateFieldClick('id_image')" class="popup-settings-buttons-bg">Change Profile Picture</button>
         <form action="/pp-new/" method="post" id="image-form" enctype="multipart/form-data">
           {% csrf_token %}
           {{formImageUpdate.image}}
@@ -14,7 +14,7 @@
         <br>
         <p id="username">123</p>
         <p id="email">123</p>
-        <button onclick="openPopupChangeMasterPassword()" class="popup-settings-buttons">Change Master Password</button>
+        <button onclick="openPopupChangeMasterPassword()" class="popup-settings-buttons-red">Change Master Password</button>
       </div>
   </div>
 </div>

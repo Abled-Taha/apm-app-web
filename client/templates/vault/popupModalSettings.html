@@ -2,22 +2,22 @@
   <div class="modal-content">
       <span class="close" id="popup-settings-close" onclick="closePopupSettings()">&times;</span>
       <div class="options-div">
-        <li><button class="popup-settings-buttons" onclick=openPopupUserSettings()>User Settings > </button></li>
+        <li><button class="popup-settings-buttons-bg" onclick=openPopupUserSettings()>User Settings > </button></li>
         <br>
-        <li><button class="popup-settings-buttons" onclick=openPopupSessions()>Sessions > </button></li>
+        <li><button class="popup-settings-buttons-bg" onclick=openPopupSessions()>Sessions > </button></li>
         <br>
-        <li><button class="popup-settings-buttons" onclick=openPopupVaultSettings()>Vault Settings > </button></li>
+        <li><button class="popup-settings-buttons-bg" onclick=openPopupVaultSettings()>Vault Settings > </button></li>
         <br>
-        <li><button class="popup-settings-buttons" onclick=openPopupPGConfig()>Password Generator Config > </button></li>
+        <li><button class="popup-settings-buttons-bg" onclick=openPopupPGConfig()>Password Generator Config > </button></li>
         {% if verified == False %}
           <br>
           <div class="alert alert-danger fade show" role="alert">
-            Note: For your account to be recovered in the case of emergency, your email must be verified.
+            Note: For you to be able to enable 2FA, your email must be verified.
             <button class="popup-settings-buttons-red" onclick="simulateAnchorClick(/otp/)">Verify Email</button>
           </div>
         {% endif %}
       </div>
       <br>
-      <button class="popup-settings-buttons-bg" onclick=simulateAnchorClick("/logout")>Logout</button>
+      <button class="popup-settings-buttons-red" onclick=simulateAnchorClick("/logout")>Logout</button>
   </div>
 </div>

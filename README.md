@@ -20,12 +20,11 @@ None of these repositores or single projects can and should be used just on thei
 
 # Todo
 1. Support BitWarden Imports
-2. Forgot Password
-3. Extension
-4. Mobile App
-5. 2FA
-6.  Auto Fill
-7.  Emergency Contact Access
-8.  Password History
-9.  Biometric Access
-10. Offline Access
+2. Extension
+3. Mobile App
+4. 2FA
+5.  Auto Fill
+6.  Emergency Contact Access
+7.  Password History
+8.  Biometric Access
+9.  Offline Access

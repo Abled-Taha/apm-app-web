@@ -82,4 +82,4 @@ class Otp(forms.Form):
 
 class ChangePassword(forms.Form):
     oldPassword = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Enter your old password"}))
-    newPassword = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Enter your new password"}))
+    newMasterPassword = forms.CharField(label="", max_length=100, widget=forms.PasswordInput({"placeholder":"Enter your new password"}))

@@ -2,7 +2,7 @@
   <div class="modal-content">
     <span class="close" id="popup-edit-close" onclick="closePopupEdit()">&times;</span>
     <div class="edit-body">
-      <div class="edit-container">
+      <div class="container edit-container">
         <div class="edit-box">
           <h2>Edit the Password</h2>
           <form action="/vault-edit/" method="POST">
@@ -35,7 +35,7 @@
                 <label for="id" id="popup-edit-id-label">id</label>
                 {{formVaultEdit.id}}
               </div>
-              <button type="submit">Save</button>
+              <button type="submit" class="popup-settings-buttons-bg">Save</button>
           </form>
       </div>
     </div>

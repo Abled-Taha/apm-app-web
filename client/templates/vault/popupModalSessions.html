@@ -8,10 +8,10 @@
             {% for key1, value1 in entry.items %}
               {% if key1 == "sessionId" %}
                 {% if value == "" %}
-                  <button class="popup-settings-buttons" onclick="openPopupSession('{{value}}', '{{value1}}')">"No Name"</button>
+                  <button class="popup-settings-buttons-bg" onclick="openPopupSession('{{value}}', '{{value1}}')">"No Name"</button>
                   <br>
                 {% else %}
-                  <button class="popup-settings-buttons" onclick="openPopupSession('{{value}}', '{{value1}}')">{{value}}</button>
+                  <button class="popup-settings-buttons-bg" onclick="openPopupSession('{{value}}', '{{value1}}')">{{value}}</button>
                   <br>
                 {% endif %}
               {% endif %}

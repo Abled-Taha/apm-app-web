@@ -309,18 +309,21 @@ function togglePasswordVisibility() {
   const passwordField = document.getElementById("id_password");
   const id_oldPasswordField = document.getElementById("id_oldPassword");
   const newPasswordField = document.getElementById("id_newPassword");
+  const newMasterPasswordField = document.getElementById("id_newMasterPassword");
   const toggleIconPassword = document.getElementById("togglePassword");
 
   if (passwordField.type === "password") {
       passwordField.type = "text";
       id_oldPasswordField.type = "text";
       newPasswordField.type = "text";
+      newMasterPasswordField.type = "text";
       toggleIconPassword.classList.remove("fa-eye");
       toggleIconPassword.classList.add("fa-eye-slash");
   } else {
       passwordField.type = "password";
       id_oldPasswordField.type = "password";
       newPasswordField.type = "password";
+      newMasterPasswordField.type = "password";
       toggleIconPassword.classList.remove("fa-eye-slash");
       toggleIconPassword.classList.add("fa-eye");
   }
@@ -483,6 +486,10 @@ function calculateStrengthBarRank(score) {
   } else {
     return 'high';
   }
+}
+
+function darkmode() {
+  console.log("Not Implemented YET")
 }
 
 document.addEventListener('keydown', handleKeyDownMain)
