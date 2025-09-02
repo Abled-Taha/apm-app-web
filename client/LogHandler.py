@@ -10,6 +10,6 @@ class LogHandler(object):
 
   def write(self, data):
     with open(f'{self.BASE_DIR}/logs.txt', 'a') as f:
-      f.write(f"{datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")} | {data}")
+      f.write(f"{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')} | {data}")
       f.write('\n')
     return True
