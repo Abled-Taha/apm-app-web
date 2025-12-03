@@ -20,7 +20,10 @@ def run_client():
     setupConfig()
     
     os.chdir("./client")
-    subprocess.call(["waitress-serve", f"--listen={ConfigObj.client_host}:{ConfigObj.client_port}", "client.wsgi:application"])
+    try:
+      subprocess.call(["waitress-serve", f"--listen={ConfigObj.client_host}:{ConfigObj.client_port}", "client.wsgi:application"])
+    except:
+      print("Stopped.")
 
       
 def help():
@@ -33,10 +36,8 @@ if __name__ == "__main__":
     try:
       if sys.argv[1] == "run-client":
         run_client()
-      elif sys.argv[1] == "help":
-        help()
       else:
-          print("Invalid arguments")
+        help()
     except Exception as e:
       print(e)
       print("Provide a valid argument")
