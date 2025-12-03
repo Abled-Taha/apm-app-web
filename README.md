@@ -12,19 +12,18 @@ None of these repositores or single projects can and should be used just on thei
 ## Setting up APM-APP-WEB
 1. Clone the repository
 2. Open the directory
-3. Make ".env" file
-4. Set all the variables in that file from the "config.json" file
-5. Open a terminal in "./apm-app-web"
-6. Run ```pip install -r ./requirements.txt ; cd ./client ; python manage.py collectstatic ; cd .. ; python main.py run-client```
-7. Visit http://127.0.0.1:8080 and see it running
+3. Rename ".env.example""file to ".env"
+4. Open a terminal in "./apm-app-web"
+5. Run ```pip install -r ./requirements.txt ; cd ./client ; python manage.py collectstatic ; cd .. ; python main.py run-client```
+6. Visit http://127.0.0.1:8080 and see it running
 
 # Todo
 1. Support BitWarden Imports
 2. Extension
 3. Mobile App
 4. 2FA
-5.  Auto Fill
-6.  Emergency Contact Access
-7.  Password History
-8.  Biometric Access
-9.  Offline Access
+5. Auto Fill
+6. Emergency Contact Access
+7. Password History
+8. Biometric Access
+9. Offline Access

@@ -1,4 +1,4 @@
-import os
+import os, json
 from dotenv import load_dotenv
 
 class Config(object):
@@ -10,18 +10,21 @@ class Config(object):
     try:
       load_dotenv(f'{self.BASE_DIR}/../.env')
     except:
+      print("Warning: .env File Not Found! Trying to load default session values")
       pass
+    try:
+      with open(f'{self.BASE_DIR}/../config.json', 'r') as f:
+        self.config = json.load(f)
+    except:
+      raise Exception("Critical: Config File Not Found!")
       
-    self.debug = os.getenv("debug", "False")
-    if self.debug == "True":
-      self.debug = True
-    else:
-      self.debug = False
     self.secret_key = os.getenv("secret_key", "django-insecure-#s7(mccb@usp4x*%dne+60q7$o61vtkivsua^a(lx9w8vk!w=w")
-    self.server_host = os.getenv("server_host", "127.0.0.1")
-    self.server_port = int(os.getenv("server_port", "8000"))
-    self.client_host = os.getenv("client_host", "127.0.0.1")
-    self.client_port = int(os.getenv("client_port", "8080"))
-    self.allowed_hosts = os.getenv("allowed_hosts", "*").split(",")
-    self.max_retries = int(os.getenv("max_retries", "3"))
     self.api_token = os.getenv("api_token", "")
+
+    self.debug = self.config["debug"]
+    self.server_host = self.config["server_host"]
+    self.server_port = self.config["server_port"]
+    self.client_host = self.config["client_host"]
+    self.client_port = self.config["client_port"]
+    self.allowed_hosts = self.config["allowed_hosts"]
+    self.max_retries = self.config["max_retries"]
