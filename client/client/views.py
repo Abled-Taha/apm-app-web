@@ -117,13 +117,13 @@ def signup(request):
         "rePassword":form.cleaned_data["rePassword"]
       }
       url = f'{base_url}/signup/'
-
       success, dict_response = functions.sendRequestPost(url, data)
+
       if success:
-        # response = redirect("signin", permanent=True)
         messages.success(request, "Account Created")
 
         LogHandlerObj.write(f"Signup | OK | {data['email']} | {functions.get_client_ip(request)}")
+        
         # return response
         return(signin(request))
       elif success == None:
